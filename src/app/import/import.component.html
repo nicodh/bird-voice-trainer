@@ -1,5 +1,5 @@
 <form class="example-form">
-  <mat-form-field class="example-full-width">
+  <mat-form-field class="search-field">
     <input matInput 
       placeholder="Enter search term..."
       [matAutocomplete]="auto"
@@ -10,4 +10,19 @@
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
+  <p>
+    <span *ngIf="isLoading">Loading...</span>
+  </p>
+  <div class="recordings"  *ngIf="!isLoading">
+    <ul>
+      <li *ngFor="let recording of (recordings$ | async); index as i;">
+        <mat-checkbox (click)="toggleRecord($event, recording)" ></mat-checkbox>
+        <span class="icon-wrapper">
+          <svg-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" src="assets/icons/play-button.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+          <svg-icon *ngIf="currentIndex === i" (click)="stop()" src="assets/icons/pause-button.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+        </span>
+        Type: {{recording.type}}, {{recording.cnt}}
+      </li>
+    </ul>
+  </div>
 </form>
