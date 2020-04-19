@@ -1,5 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -8,6 +9,7 @@ import { SettingsComponent } from './settings/settings.component';
 import { TrainerComponent } from './trainer/trainer.component';
 import { ImportComponent } from './import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { ApiService } from './api.service';
 import { environment } from '../environments/environment';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -20,7 +22,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     AppComponent,
     SettingsComponent,
     TrainerComponent,
-    ImportComponent
+    ImportComponent,
   ],
   imports: [
     BrowserModule,
@@ -32,8 +34,11 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
     MatFormFieldModule,
     MatInputModule,
     MatAutocompleteModule,
+    HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    ApiService,
+  ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

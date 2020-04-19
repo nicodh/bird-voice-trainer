@@ -5,8 +5,8 @@
       [matAutocomplete]="auto"
       [formControl]="searchFieldControl" />
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of options" [value]="option">
-        {{option}}
+      <mat-option *ngFor="let option of (suggestions$ | async)" (onSelectionChange)="onOptionSelected(option)">
+        {{option.common_name}}
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

@@ -1,0 +1,12 @@
+{
+  "/webServiceApi/**": {
+    "target": "https://www.xeno-canto.org/api/2/recordings",
+    "secure": false,
+    "changeOrigin": true
+  },
+  "/autoSuggestApi/**": {
+    "target": "https://www.xeno-canto.org/api/internal/completion/species",
+    "secure": false,
+    "changeOrigin": true
+  }
+}

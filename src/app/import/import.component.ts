@@ -1,5 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
+import { ApiService, AutoSuggestItem, AutoSuggestResponse } from '../api.service';
+import { Observable } from 'rxjs';
+import { debounceTime, switchMap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-import',
@@ -8,15 +11,21 @@ import {FormControl} from '@angular/forms';
 })
 export class ImportComponent implements OnInit {
 
-  searchFieldControl: FormControl;
+  searchFieldControl = new FormControl('');
 
-  options: string[] = ['One', 'Two', 'Three'];
+  suggestions$: Observable<AutoSuggestItem[]>;
 
-  constructor() {
-    this.searchFieldControl = new FormControl();
-  }
+  constructor(private apiService: ApiService) {}
 
   ngOnInit(): void {
+    this.suggestions$ = this.searchFieldControl.valueChanges.pipe(
+      debounceTime(300),
+      switchMap(value => this.apiService.getAutoSuggests(value))
+    );
+  }
+
+  onOptionSelected(selectedOption: AutoSuggestItem) {
+    this.searchFieldControl.patchValue(selectedOption.common_name);
   }
 
 }
