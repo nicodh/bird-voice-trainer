@@ -1,0 +1,7 @@
+<ul>
+  <li *ngFor="let training of trainings" >
+    <button mat-stroked-button (click)="startTraining(training)">
+     {{training.name}}
+    </button>
+  </li>
+</ul>

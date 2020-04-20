@@ -5,9 +5,9 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { SettingsComponent } from './settings/settings.component';
-import { TrainerComponent } from './trainer/trainer.component';
-import { ImportComponent } from './import/import.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { TrainerComponent } from './components/trainer/trainer.component';
+import { ImportComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ApiService } from './api.service';
 import { environment } from '../environments/environment';
@@ -15,8 +15,48 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
+
+const dbConfig: DBConfig  = {
+  name: 'bird-trainer',
+  version: 1,
+  objectStoresMeta: [
+    {
+      store: 'recordings',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'species', keypath: 'species', options: { unique: false } },
+      ]
+    },
+    {
+      store: 'species',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'name', keypath: 'name', options: { unique: true } },
+        { name: 'latin_name', keypath: 'latin_name', options: { unique: true } },
+      ]
+    },
+    {
+      store: 'trainings',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'name', keypath: 'name', options: { unique: false } },
+      ]
+    },
+    {
+      store: 'trainingSpecies',
+      storeConfig: { keyPath: 'id', autoIncrement: true },
+      storeSchema: [
+        { name: 'training', keypath: 'training', options: { unique: false } },
+        { name: 'species', keypath: 'species', options: { unique: false } },
+      ]
+    }
+  ]
+};
 
 @NgModule({
   declarations: [
@@ -36,8 +76,10 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     MatInputModule,
     MatAutocompleteModule,
     MatCheckboxModule,
+    MatButtonModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot()
+    AngularSvgIconModule.forRoot(),
+    NgxIndexedDBModule.forRoot(dbConfig)
   ],
   providers: [
     ApiService,

@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { ApiService, AutoSuggestItem, Recording } from '../api.service';
-import { AudioService } from '../services/audioService';
-import { StreamState } from '../services/streamState';
+import { ApiService, AutoSuggestItem, Recording } from '../../api.service';
+import { AudioService } from '../../services/audioService';
+import { StreamState } from '../../services/streamState';
 import { Observable } from 'rxjs';
 import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
+import { NgxIndexedDBService } from 'ngx-indexed-db';
 
 @Component({
   selector: 'app-import',
@@ -15,9 +16,13 @@ export class ImportComponent implements OnInit {
 
   isLoading = false;
 
+  loadingRecords = false;
+
   searchFieldControl = new FormControl('');
 
   suggestions$: Observable<AutoSuggestItem[]>;
+
+  selectedSpecies: AutoSuggestItem;
 
   recordings$: Observable<Recording[]>;
 
@@ -25,11 +30,14 @@ export class ImportComponent implements OnInit {
 
   state: StreamState;
 
-  selectedRecords: Recording[] = [];
+  selectedRecordings: Recording[] = [];
+
+  hideUnselected = false;
 
   constructor(
     private apiService: ApiService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    private dbService: NgxIndexedDBService
     ) {
       this.audioService.getState()
       .subscribe(state => {
@@ -50,23 +58,52 @@ export class ImportComponent implements OnInit {
   }
 
   onOptionSelected(selectedOption: AutoSuggestItem) {
-    this.isLoading = true;
+    this.loadingRecords = true;
+    this.selectedSpecies = selectedOption;
     this.searchFieldControl.patchValue(selectedOption.common_name);
-    this.recordings$ = this.apiService.getRecordsForSpecies(selectedOption.species).pipe(
-      finalize(() => this.isLoading = false)
+    this.recordings$ = this.apiService.getRecordsForSpecies(selectedOption.species);
+  }
+
+  toggleSelectView() {
+    this.hideUnselected = !this.hideUnselected;
+  }
+
+  saveRecordings() {
+    this.audioService.stop();
+    console.log(this.selectedRecordings);
+    let savedRecords = 0;
+    this.dbService.add(
+      'species',
+      {name: this.selectedSpecies.common_name, latin_name: this.selectedSpecies.species, }
+    ).then(
+      insertId => {
+        this.selectedRecordings.forEach(recording => {
+          const {id, cnt, file, type, gen, sp, ssp} = recording;
+          this.dbService.add(
+            'recordings',
+            {id, species: insertId, name: this.selectedSpecies.common_name, cnt, file, type, gen, sp, ssp}
+          ).then(
+            () => savedRecords++,
+            err => console.log(err)
+          );
+        });
+      },
+      err => console.log(err)
     );
-    this.recordings$.subscribe(records => console.log(records));
+  }
+
+  isSelected(recording) {
+    return this.selectedRecordings.indexOf(recording) > -1;
   }
 
   toggleRecord(evt, recording: Recording) {
     if (!evt.target.checked) {
       console.log('add', recording);
-      this.selectedRecords.push(recording);
+      this.selectedRecordings.push(recording);
     } else {
       console.log('remove', recording);
-      this.selectedRecords = this.selectedRecords.filter(r => r !== recording);
+      this.selectedRecordings = this.selectedRecordings.filter(r => r !== recording);
     }
-    console.log(this.selectedRecords);
   }
 
   playStream(url, index) {

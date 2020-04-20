@@ -1,0 +1,32 @@
+<button mat-stroked-button (click)="createTraining()" *ngIf="!showForm">
+  New training
+</button>
+<div *ngIf="showForm">
+  <form class="search-form">
+    <mat-form-field class="search-field">
+      <input matInput 
+        placeholder="Enter name"
+        [formControl]="trainingNameFieldControl" />
+    </mat-form-field>
+  </form>
+  <ul>
+    <li *ngFor="let species of allSpecies" >
+        <mat-checkbox (click)="toggleSpecies($event, species)" ></mat-checkbox>
+       {{species.name}} ({{species.latin_name}}
+    </li>
+  </ul>
+  <button mat-stroked-button (click)="saveTraining()">
+    Save training
+  </button>
+  <button mat-stroked-button (click)="cancel()">
+    Cancel
+  </button>
+</div>
+
+<ul *ngIf="!showForm">
+  <li *ngFor="let training of trainings" >
+    <button mat-stroked-button (click)="editTraining(training)">
+     {{training.name}}
+    </button>
+  </li>
+</ul>

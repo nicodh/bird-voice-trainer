@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { TrainerComponent } from './trainer/trainer.component';
-import { SettingsComponent } from './settings/settings.component';
-import { ImportComponent } from './import/import.component';
+import { TrainerComponent } from './components/trainer/trainer.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { ImportComponent } from './components/import/import.component';
 
 
 const routes: Routes = [

@@ -1,7 +1,30 @@
+app-import {
+  text-align: center;
+}
+
 form.search-form {
   display: block;
   text-align: center;
+  button {
+    margin: 5px;
+  }
 }
+
+.loader{
+  margin: 0 0 2em;
+  height: 100px;
+  width: 20%;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: inline-block;
+  vertical-align: top;
+  svg path,
+  svg rect{
+    fill: rgb(13, 69, 77);
+  }
+}
+
 
 mat-form-field {
   width:400px;
@@ -19,6 +42,10 @@ mat-form-field {
     list-style: none;
     font-size: 1.5rem;
     height: 3rem;
+    display: none;
+    &.visible {
+      display: block;
+    }
     span.icon-wrapper {
       display: block;
       float: left;
