@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
+import { Recording, RecordingsResponse } from '../../sharedTypes';
 
 export interface AutoSuggestResponse {
   data: AutoSuggestItem[];
@@ -16,47 +17,7 @@ export interface AutoSuggestItem {
   species?: string;
 }
 
-export interface RecordingsResponse {
-  numRecordings: number;
-  numSpecies: number;
-  page: number;
-  numPages: number;
-  recordings: Recording[];
-}
 
-export interface Recording {
-  id: number;
-  gen: string;
-  sp: string;
-  ssp: string;
-  en: string;
-  rec: string;
-  cnt: string;
-  loc: string;
-  lat: number;
-  lng: number;
-  alt: number;
-  type: string;
-  url: string;
-  file: string;
-  'file-name': string; // mp3
-  sono: {
-      small: string;
-      med: string;
-      large: string;
-      full: string;
-  },
-  lic: string;
-  q: string;
-  length: string;
-  time: string;
-  date: string;
-  uploaded: string;
-  also: Array<string>,
-  rmk: string;
-  'bird-seen': string;
-  'playback-used': string;
-};
 
 @Injectable({
   providedIn: 'root'

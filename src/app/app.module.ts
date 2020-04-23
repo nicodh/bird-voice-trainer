@@ -9,7 +9,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { TrainerComponent } from './components/trainer/trainer.component';
 import { ImportComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
-import { ApiService } from './api.service';
+import { ApiService } from './services/apiService';
+import { PersistenceService } from './services/persistenceService';
 import { environment } from '../environments/environment';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -19,44 +20,43 @@ import { MatButtonModule } from '@angular/material/button';
 
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { NgxIndexedDBModule, DBConfig } from 'ngx-indexed-db';
 
-const dbConfig: DBConfig  = {
-  name: 'bird-trainer',
-  version: 1,
-  objectStoresMeta: [
-    {
-      store: 'recordings',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [
-        { name: 'species', keypath: 'species', options: { unique: false } },
-      ]
-    },
-    {
-      store: 'species',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [
-        { name: 'name', keypath: 'name', options: { unique: true } },
-        { name: 'latin_name', keypath: 'latin_name', options: { unique: true } },
-      ]
-    },
-    {
-      store: 'trainings',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [
-        { name: 'name', keypath: 'name', options: { unique: false } },
-      ]
-    },
-    {
-      store: 'trainingSpecies',
-      storeConfig: { keyPath: 'id', autoIncrement: true },
-      storeSchema: [
-        { name: 'training', keypath: 'training', options: { unique: false } },
-        { name: 'species', keypath: 'species', options: { unique: false } },
-      ]
-    }
-  ]
-};
+// const dbConfig: DBConfig  = {
+//   name: 'bird-trainer',
+//   version: 1,
+//   objectStoresMeta: [
+//     {
+//       store: 'recordings',
+//       storeConfig: { keyPath: 'id', autoIncrement: true },
+//       storeSchema: [
+//         { name: 'species', keypath: 'species', options: { unique: false } },
+//       ]
+//     },
+//     {
+//       store: 'species',
+//       storeConfig: { keyPath: 'id', autoIncrement: true },
+//       storeSchema: [
+//         { name: 'name', keypath: 'name', options: { unique: true } },
+//         { name: 'latin_name', keypath: 'latin_name', options: { unique: true } },
+//       ]
+//     },
+//     {
+//       store: 'trainings',
+//       storeConfig: { keyPath: 'id', autoIncrement: true },
+//       storeSchema: [
+//         { name: 'name', keypath: 'name', options: { unique: false } },
+//       ]
+//     },
+//     {
+//       store: 'trainingSpecies',
+//       storeConfig: { keyPath: 'id', autoIncrement: true },
+//       storeSchema: [
+//         { name: 'training', keypath: 'training', options: { unique: false } },
+//         { name: 'species', keypath: 'species', options: { unique: false } },
+//       ]
+//     }
+//   ]
+// };
 
 @NgModule({
   declarations: [
@@ -78,11 +78,11 @@ const dbConfig: DBConfig  = {
     MatCheckboxModule,
     MatButtonModule,
     HttpClientModule,
-    AngularSvgIconModule.forRoot(),
-    NgxIndexedDBModule.forRoot(dbConfig)
+    AngularSvgIconModule.forRoot()
   ],
   providers: [
     ApiService,
+    PersistenceService,
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

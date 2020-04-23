@@ -25,9 +25,9 @@
     "@angular/router": "~9.1.1",
     "@angular/service-worker": "~9.1.1",
     "angular-svg-icon": "^9.2.0",
+    "dexie": "^2.0.4",
     "express": "^4.17.1",
     "http-proxy": "^1.18.0",
-    "ngx-indexed-db": "^5.0.2",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

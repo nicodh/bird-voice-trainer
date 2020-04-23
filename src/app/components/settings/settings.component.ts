@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
-import { NgxIndexedDBService } from 'ngx-indexed-db';
-import { Observable } from 'rxjs';
+import { PersistenceService } from '../../services/persistenceService';
+import { Training } from '../../../sharedTypes';
 
 interface Species {
   id: number;
@@ -20,60 +20,90 @@ export class SettingsComponent implements OnInit {
 
   trainingNameFieldControl = new FormControl('');
 
-  trainings: Array<{ name: string; }>;
+  trainings: Array<Training>;
+
+  currentTraining: Training;
 
   allSpecies: Species[];
 
-  selectedSpecies: Species[] = [];
+  selectedSpecies: number[] = [];
 
-  constructor(private dbService: NgxIndexedDBService) { }
+  constructor(private dbService: PersistenceService) { }
 
   ngOnInit(): void {
-    this.dbService.getAll('trainings').then(
-      (trainings: Array<{ name: string; }>) => this.trainings = trainings
+    this.refreshTrainings();
+    this.dbService.getSpecies().then(
+      (result: Species[]) => this.allSpecies = result
+    );
+  }
+
+  refreshTrainings() {
+    this.dbService.getTrainings().then(
+      (trainings: Array<Training>) => this.trainings = trainings
     );
   }
 
   createTraining() {
     this.showForm = true;
-    this.dbService.getAll('species').then(
-      (result: Species[]) => this.allSpecies = result
-    );
   }
 
   toggleSpecies(evt, species) {
-    if (!evt.target.checked) {
+    if (this.selectedSpecies.indexOf(species.id) < 0) {
       console.log('add', species);
-      this.selectedSpecies.push(species);
+      this.selectedSpecies.push(species.id);
+      return false;
     } else {
       console.log('remove', species);
-      this.selectedSpecies = this.selectedSpecies.filter(r => r !== species);
+      this.selectedSpecies = this.selectedSpecies.filter(r => r !== species.id);
+      return false;
     }
   }
 
   saveTraining() {
-    this.dbService.add(
-      'trainings',
-      {name: this.trainingNameFieldControl.value}
-    ).then(
-      insertId => {
-        this.selectedSpecies.forEach(species => {
-          this.dbService.add(
-            'trainingSpecies',
-            {training: insertId, species: species.id}
-          );
-        });
-      },
-      err => console.log(err)
-    );
+    if (this.currentTraining) {
+      this.dbService.updateTraining(
+        {
+          id: this.currentTraining.id,
+          name: this.trainingNameFieldControl.value,
+          speciesId: this.selectedSpecies
+        }
+      ).then(() => {
+        this.cancel();
+        this.refreshTrainings();
+      });
+    } else {
+      this.dbService.saveTraining(
+        {
+          name: this.trainingNameFieldControl.value,
+          species: this.selectedSpecies
+        }
+      ).then(() => {
+        this.cancel();
+        this.refreshTrainings();
+      });
+    }
   }
 
-  editTraining(training) {
-    console.log(training);
+  async editTraining(training: Training) {
+    this.dbService.loadSpeciesByTraining(training.id).then(
+      assignedItems => {
+        this.selectedSpecies = assignedItems;
+        this.showForm = true;
+        this.trainingNameFieldControl.patchValue(training.name);
+        console.log(assignedItems);
+        this.currentTraining = training;
+      }
+    );
   }
 
   cancel() {
     this.showForm = false;
+    this.trainingNameFieldControl.patchValue('');
     this.selectedSpecies = [];
+    this.currentTraining = null;
+  }
+
+  isSelected(species) {
+    return this.selectedSpecies.indexOf(species.id) > -1;
   }
 }

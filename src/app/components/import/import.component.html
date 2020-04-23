@@ -13,7 +13,7 @@
   <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedRecordings.length > 0">
     <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
   </button>
-  <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save selected</button>
+  <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save</button>
   <div class="species-info" *ngIf="selectedSpecies?.species_nr">
     Selected: {{selectedSpecies?.common_name}} ({{selectedSpecies?.species}}): {{selectedSpecies?.recordings}} recordings
   </div>
@@ -23,7 +23,7 @@
   <div class="recordings"  *ngIf="!isLoading">
     <ul>
       <li *ngFor="let recording of (recordings$ | async); index as i;"  [class.visible]="!hideUnselected || (hideUnselected && isSelected(recording))">
-          <mat-checkbox (click)="toggleRecord($event, recording)" ></mat-checkbox>
+          <mat-checkbox (click)="toggleRecord($event, recording)" [checked]="isSelected(recording)"></mat-checkbox>
           <span class="icon-wrapper">
             <svg-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" src="assets/icons/play-button.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
             <svg-icon *ngIf="currentIndex === i" (click)="stop()" src="assets/icons/pause-button.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
@@ -33,3 +33,11 @@
     </ul>
   </div>
 </form>
+<div class="importedSpecies" *ngIf="viewMode!='edit'">
+  <h3>Imported species</h3>
+  <ul *ngIf="showSpeciesList && !isLoading">
+    <li *ngFor="let species of (species$ | async)" (click)="editSpecies(species)" class="species-item">
+      {{species.name}} <svg-icon src="assets/icons/icons-edit.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+      </li>
+  </ul>
+</div>

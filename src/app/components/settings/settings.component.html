@@ -9,10 +9,10 @@
         [formControl]="trainingNameFieldControl" />
     </mat-form-field>
   </form>
-  <ul>
+  <ul class="species-list">
     <li *ngFor="let species of allSpecies" >
-        <mat-checkbox (click)="toggleSpecies($event, species)" ></mat-checkbox>
-       {{species.name}} ({{species.latin_name}}
+        <mat-checkbox (click)="toggleSpecies($event, species)" [checked]="isSelected(species)"></mat-checkbox>
+       {{species.name}} ({{species.latin_name}})
     </li>
   </ul>
   <button mat-stroked-button (click)="saveTraining()">
@@ -23,10 +23,10 @@
   </button>
 </div>
 
-<ul *ngIf="!showForm">
+<ul *ngIf="!showForm" class="training-list">
   <li *ngFor="let training of trainings" >
-    <button mat-stroked-button (click)="editTraining(training)">
-     {{training.name}}
-    </button>
+    <a (click)="editTraining(training)">
+     {{training.name}}  <svg-icon src="assets/icons/icons-edit.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+    </a>
   </li>
 </ul>

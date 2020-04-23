@@ -1,3 +1,10 @@
-li {
-  list-style: none;
+:host {
+  text-align: center;
+}
+
+ul.species-list {
+  margin: auto;
+  width: 500px;
+  text-align: left;
+  padding-left: 200px;
 }
