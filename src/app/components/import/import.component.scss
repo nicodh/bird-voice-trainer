@@ -10,6 +10,11 @@ form.search-form {
   }
 }
 
+.species-info {
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
 .loader{
   margin: 0 0 2em;
   height: 100px;
@@ -50,9 +55,6 @@ mat-form-field {
           cursor: pointer;
           margin: 5px 10px;
         }
-      }
-      .mat-checkbox-checked.mat-accent .mat-checkbox-background {
-        color: green;
       }
     }
   }

@@ -13,8 +13,12 @@ ul {
   padding: 0;
   li {
     list-style: none;
-    font-size: 1.5rem;
-    min-height: 3rem;
+    font-size: 1.6rem;
+    min-height: 5rem;
+    span.content {
+      display: block;
+      padding-top: 1rem;
+    }
   }
 }
 
@@ -26,4 +30,13 @@ ul.training-list li {
     margin: -8px 8px;
     position: absolute;
   }
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.mat-checkbox-inner-container {
+  width: 24px;
+  height: 24px;
 }

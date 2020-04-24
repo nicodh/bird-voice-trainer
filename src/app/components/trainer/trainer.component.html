@@ -1,7 +1,12 @@
-<ul>
+<ul class="trainings-list" *ngIf="!currentTraining">
   <li *ngFor="let training of trainings" >
-    <button mat-stroked-button (click)="startTraining(training)">
+    <button mat-stroked-button (click)="loadTraining(training)">
      {{training.name}}
     </button>
   </li>
 </ul>
+<div *ngIf="currentTraining">
+<h3>{{currentTraining.name}}</h3>
+<svg-icon *ngIf="!playing" (click)="start()" src="assets/icons/play-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
+<svg-icon *ngIf="playing" (click)="pause()" src="assets/icons/pause-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
+</div>

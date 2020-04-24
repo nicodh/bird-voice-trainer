@@ -21,42 +21,6 @@ import { MatButtonModule } from '@angular/material/button';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AngularSvgIconModule } from 'angular-svg-icon';
 
-// const dbConfig: DBConfig  = {
-//   name: 'bird-trainer',
-//   version: 1,
-//   objectStoresMeta: [
-//     {
-//       store: 'recordings',
-//       storeConfig: { keyPath: 'id', autoIncrement: true },
-//       storeSchema: [
-//         { name: 'species', keypath: 'species', options: { unique: false } },
-//       ]
-//     },
-//     {
-//       store: 'species',
-//       storeConfig: { keyPath: 'id', autoIncrement: true },
-//       storeSchema: [
-//         { name: 'name', keypath: 'name', options: { unique: true } },
-//         { name: 'latin_name', keypath: 'latin_name', options: { unique: true } },
-//       ]
-//     },
-//     {
-//       store: 'trainings',
-//       storeConfig: { keyPath: 'id', autoIncrement: true },
-//       storeSchema: [
-//         { name: 'name', keypath: 'name', options: { unique: false } },
-//       ]
-//     },
-//     {
-//       store: 'trainingSpecies',
-//       storeConfig: { keyPath: 'id', autoIncrement: true },
-//       storeSchema: [
-//         { name: 'training', keypath: 'training', options: { unique: false } },
-//         { name: 'species', keypath: 'species', options: { unique: false } },
-//       ]
-//     }
-//   ]
-// };
 
 @NgModule({
   declarations: [

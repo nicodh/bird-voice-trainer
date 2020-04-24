@@ -42,7 +42,10 @@ export class ImportComponent implements OnInit {
 
   species$: Observable<Species[]>;
 
-  viewMode = 'import';
+  viewMode = 'default';
+
+  startFrom = 0;
+  limitTo = 100;
 
   constructor(
     private apiService: ApiService,
@@ -60,7 +63,8 @@ export class ImportComponent implements OnInit {
     this.searchFieldControl.patchValue('');
     this.recordings$ = from([]);
     this.selectedSpecies = null;
-    this.viewMode = 'import';
+    this.viewMode = 'default';
+    this.loadingRecords = false;
     this.isLoading = false;
   }
 
@@ -127,23 +131,20 @@ export class ImportComponent implements OnInit {
   }
 
   toggleRecord(evt, recording: Recording) {
-    if (!evt.target.checked) {
-      console.log('add', recording);
-      this.selectedRecordings.push(recording);
-    } else {
+    if (this.isSelected(recording)) {
       console.log('remove', recording);
       this.selectedRecordings = this.selectedRecordings.filter(r => r !== recording);
-    }
+    } else {
+      console.log('add', recording);
+      this.selectedRecordings.push(recording);
+    } 
+    evt.stopPropagation();
   }
 
-  playStream(url, index) {
+  playStream(url: string, index: number) {
     this.currentIndex = index;
     this.audioService.stop();
-    this.audioService.playStream('https:' + url)
-    .subscribe(events => {
-      // listening for fun here
-      // console.log(events);
-    });
+    this.audioService.playStream('https:' + url);
   }
 
   pause() {
