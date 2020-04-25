@@ -144,7 +144,7 @@ export class ImportComponent implements OnInit {
   playStream(url: string, index: number) {
     this.currentIndex = index;
     this.audioService.stop();
-    this.audioService.playStream('https:' + url);
+    this.audioService.playStream('https:' + url).subscribe(events => {});
   }
 
   pause() {

@@ -6,7 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
-import { TrainerComponent } from './components/trainer/trainer.component';
+import { TrainerComponent, ShowBirdDialogComponent } from './components/trainer/trainer.component';
 import { ImportComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ApiService } from './services/apiService';
@@ -17,6 +17,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
 
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import { AngularSvgIconModule } from 'angular-svg-icon';
@@ -28,6 +29,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     SettingsComponent,
     TrainerComponent,
     ImportComponent,
+    ShowBirdDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -41,6 +43,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     MatAutocompleteModule,
     MatCheckboxModule,
     MatButtonModule,
+    MatDialogModule,
     HttpClientModule,
     AngularSvgIconModule.forRoot()
   ],

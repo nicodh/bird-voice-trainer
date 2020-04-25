@@ -5,8 +5,45 @@
     </button>
   </li>
 </ul>
-<div *ngIf="currentTraining">
+<div *ngIf="currentTraining" class="training-display">
 <h3>{{currentTraining.name}}</h3>
 <svg-icon *ngIf="!playing" (click)="start()" src="assets/icons/play-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
 <svg-icon *ngIf="playing" (click)="pause()" src="assets/icons/pause-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
+
+<p></p>
+<mat-form-field class="search-field">
+  <input matInput 
+    placeholder="Enter result"
+    [matAutocomplete]="auto"
+    [formControl]="resultFieldControl" 
+    />
+  <mat-autocomplete #auto="matAutocomplete" >
+    <div *ngIf="resultFieldControl?.value?.length > 3">
+      <mat-option *ngFor="let option of getResultSuggestions()" (onSelectionChange)="onOptionSelected(option)">
+        {{option.name}}
+      </mat-option>
+    </div>
+  </mat-autocomplete>
+</mat-form-field>
+  <ul class="next-item" *ngIf="currentSpecies">
+    <li class="pointer" (click)="nextRecording()">
+      <span class="content" >
+      Next sound 
+    </span>
+    <span class="icon-wrapper">
+      <svg-icon src="assets/icons/next.svg" [svgStyle]="{ 'width.px':36 }"></svg-icon>
+    </span>
+    </li>
+    <li class="pointer" (click)="nextSpecies()">
+      <span class="content" >
+        Next bird 
+      </span>
+      <span class="icon-wrapper">
+        <svg-icon src="assets/icons/next.svg" [svgStyle]="{ 'width.px':36 }"></svg-icon>
+      </span>
+    </li>
+    <li>
+      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button>
+    </li>
+  </ul>
 </div>

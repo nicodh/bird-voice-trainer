@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { PersistenceService } from '../../services/persistenceService';
 import { Training, Species, Recording } from 'src/sharedTypes';
 import { AudioService } from '../../services/audioService';
+import {FormControl} from '@angular/forms';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trainer',
@@ -14,8 +16,11 @@ export class TrainerComponent implements OnInit {
 
   constructor(
     private dbService: PersistenceService,
-    private audioService: AudioService
+    private audioService: AudioService,
+    public dialog: MatDialog
     ) { }
+
+  resultFieldControl: FormControl;
 
   viewMode: 'default';
 
@@ -31,14 +36,18 @@ export class TrainerComponent implements OnInit {
 
   lastSpecies: Species;
 
+  playedSpecies: number[] = [];
+
+  playedRecordings: number[] = [];
+
   ngOnInit(): void {
+    this.resultFieldControl = new FormControl('');
     this.dbService.getTrainings().then(
       (trainings: Array<{ name: string; }>) => this.trainings = trainings
     );
   }
 
   loadTraining(training) {
-    console.log(training);
     this.dbService.loadTraining(training.id).then(
       loadedTraining => {
         this.currentTraining = loadedTraining;
@@ -51,29 +60,75 @@ export class TrainerComponent implements OnInit {
       this.play();
       return;
     }
-    this.currentSpecies = this.getRandom(this.currentTraining.species);
+    this.nextSpecies();
+  }
+
+  nextSpecies() {
+    this.audioService.stop();
+    this.playedRecordings = [];
+    if (this.playedSpecies.length === this.currentTraining.species.length) {
+      this.playedSpecies = [];
+    }
+    if (this.currentSpecies) {
+      this.playedSpecies.push(this.currentSpecies.id);
+    }
+    this.currentSpecies = this.getRandom(this.currentTraining.species, this.playedSpecies);
+    console.log(this.currentSpecies);
     this.dbService.getRecordsBySpecies(this.currentSpecies.id).toArray().then(
       recordings => {
         this.currentRecordings = recordings;
-        this.currentRecording = this.getRandom(recordings, false);
+        this.currentRecording = this.getRandom(recordings, this.playedRecordings);
         this.playStream(this.currentRecording.file);
       }
     );
   }
 
-  getRandom(arr, checkNotLast: boolean = true) {
+  nextRecording() {
+    this.audioService.stop();
+    if (this.playedRecordings.length === this.currentRecordings.length) {
+      this.playedRecordings = [];
+    }
+    if (this.currentRecording) {
+      this.playedRecordings.push(this.currentRecording.id);
+    }
+    this.currentRecording = this.getRandom(this.currentRecordings, this.playedRecordings);
+    this.playStream(this.currentRecording.file);
+  }
+
+  getRandom(arr, playedItems: number[]) {
     const item = arr[Math.floor(Math.random() * arr.length)];
-    if (checkNotLast) {
-      if (item === this.lastSpecies) {
-        return this.getRandom(arr, true);
-      }
+    if (playedItems.includes(item.id)) {
+      return this.getRandom(arr, playedItems);
     }
     return item;
   }
 
+  getResultSuggestions() {
+    return this.currentTraining.species.filter(
+      species => species.name.indexOf(this.resultFieldControl.value) === 0
+    );
+  }
+
+  onOptionSelected(species) {
+    console.log(species);
+    if (species.id === this.currentSpecies.id) {
+      console.log('Success');
+      this.showDialog('Correct :-)', () => this.nextSpecies());
+      this.audioService.stop();
+    } else {
+      this.showDialog('Not correct :-(');
+    }
+  }
+
   playStream(url: string) {
     this.audioService.stop();
-    this.audioService.playStream('https:' + url);
+    this.audioService.playStream('https:' + url).subscribe((evt: Event) => {
+      console.log((evt.timeStamp / 1000).toFixed(0) + ' of ' + this.currentRecording.length);
+      if (evt.type === 'ended') {
+        console.log('ended');
+        this.nextRecording();
+      }
+    });
     this.playing = true;
   }
 
@@ -90,5 +145,48 @@ export class TrainerComponent implements OnInit {
   stop() {
     this.audioService.stop();
     this.playing = false;
+  }
+
+  showCurrentBird() {
+    this.dialog.open(ShowBirdDialogComponent, {
+      width: '450px',
+      data: {
+        type: 'result',
+        result: this.currentSpecies
+      }
+    });
+    // dialogRef.afterClosed().subscribe(() => {
+    //   console.log('The dialog was closed');
+    // });
+  }
+
+  showDialog(message: string, cb: () => void = null) {
+    const dialogRef = this.dialog.open(ShowBirdDialogComponent, {
+      width: '250px',
+      data: {
+        type: 'message',
+        message
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      if (cb) {
+        cb();
+      }
+    });
+  }
+}
+
+@Component({
+  selector: 'app-showbird-dialog',
+  templateUrl: './showbird.dialog.html',
+})
+export class ShowBirdDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<ShowBirdDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {type: string, result?: Species, message?: string}) {}
+
+  close(): void {
+    this.dialogRef.close();
   }
 }

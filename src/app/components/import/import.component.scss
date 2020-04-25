@@ -48,14 +48,6 @@ mat-form-field {
       &.visible {
         display: block;
       }
-      span.icon-wrapper {
-        display: block;
-        float: left;
-        svg-icon {
-          cursor: pointer;
-          margin: 5px 10px;
-        }
-      }
     }
   }
 }

@@ -1,3 +1,18 @@
 ul.trainings-list li {
   text-align: center;
 }
+
+.training-display {
+  text-align: center;
+}
+
+ul.next-item {
+  max-width: 176px;
+  margin: auto;
+  li {
+    span.content {
+      padding-top: 0.5rem;
+      float: left;
+    }
+  }
+}
