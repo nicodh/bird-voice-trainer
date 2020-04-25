@@ -1,13 +1,13 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpClientJsonpModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
-import { TrainerComponent, ShowBirdDialogComponent } from './components/trainer/trainer.component';
-import { ImportComponent } from './components/import/import.component';
+import { TrainerComponent, ShowDialogComponent } from './components/trainer/trainer.component';
+import { ImportComponent, ImportDialogComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ApiService } from './services/apiService';
 import { PersistenceService } from './services/persistenceService';
@@ -29,7 +29,8 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     SettingsComponent,
     TrainerComponent,
     ImportComponent,
-    ShowBirdDialogComponent
+    ShowDialogComponent,
+    ImportDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +46,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     MatButtonModule,
     MatDialogModule,
     HttpClientModule,
+    HttpClientJsonpModule,
     AngularSvgIconModule.forRoot()
   ],
   providers: [

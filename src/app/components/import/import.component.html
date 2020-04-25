@@ -31,7 +31,7 @@
           </span>
           <span class="content pointer" (click)="toggleRecord($event, recording)" >
             <mat-checkbox [checked]="isSelected(recording)"></mat-checkbox>
-            Type: {{recording.type}}, {{recording.cnt}}, {{recording.length}}
+            Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
           </span>
       </li>
     </ul>

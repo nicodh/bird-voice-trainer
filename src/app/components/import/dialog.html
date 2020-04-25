@@ -1,0 +1,13 @@
+<div style="text-align: center;">
+  <div style="height: 500px; overflow: scroll;">
+    <div *ngFor="let image of data.images">
+      <img src="{{image}}" (click)="selectImage(image)" /><br />
+    </div>
+  </div>
+  <div mat-dialog-actions >
+    <button mat-stroked-button style="margin: auto;" (click)="cancel()">
+      Cancel
+    </button>
+  </div>
+</div>
+)

@@ -17,6 +17,25 @@ export interface AutoSuggestItem {
   species?: string;
 }
 
+interface WikimediaResponse {
+  query: {
+    pages: {
+      [id: number]: {
+        pageid: number;
+        title: string;
+        imageinfo: [{
+          height: number;
+          width: number;
+          url: string;
+          thumbheight: number;
+          thumbwidth: number;
+          thumburl: string;
+        }]
+      }
+    }
+  };
+}
+
 
 
 @Injectable({
@@ -52,5 +71,54 @@ export class ApiService {
       map((res: RecordingsResponse) => res.recordings)
     );
   }
+
+  handleError() {
+
+  }
+
+  getImagesForSpecies(name: string, callback: (imageUrls: string[]) => void) {
+    const limit = 50;
+    const thumbWidth = 350;
+    const thumbHeight = 350;
+    this.http.get(environment.pageApiUrl + name).subscribe(
+      (data: WikimediaResponse) => {
+      {
+        const pages = data?.query?.pages;
+        console.log('pages: ', pages);
+        let matchingPageId = 0;
+        if (pages) {
+          const pageIds = Object.keys(pages);
+          pageIds.forEach(
+            pageId => {
+            if (Number(pageId) > 0 && pages[pageId].title === name) {
+              matchingPageId = Number(pageId);
+            }
+          });
+        }
+        if (matchingPageId) {
+          const dynamicUrlPart = '&gimlimit=' + limit + '&iiurlwidth=' + thumbWidth + '&iiurlheight=' + thumbHeight;
+          this.http.get(environment.imageApiUrl + dynamicUrlPart + '&pageids=' + matchingPageId).subscribe(
+            (response: WikimediaResponse) => {
+              const imageUrls = [];
+              Object.values(response.query.pages).forEach(
+                page => {
+                  if (page.imageinfo) {
+                    page.imageinfo.forEach(
+                      imageinfo => {
+                        imageUrls.push(imageinfo.thumburl);
+                      }
+                    );
+                  }
+                }
+              );
+              callback(imageUrls);
+            }
+          );
+        }
+      }
+    });
+  }
+
+  // https://commons.wikimedia.org/w/api.php?format=json&action=query&list=search&srprop=size&srlimit=30&srsearch=morelike%3AKohlmeise
 
 }

@@ -66,10 +66,9 @@ export class TrainerComponent implements OnInit {
   nextSpecies() {
     this.audioService.stop();
     this.playedRecordings = [];
-    if (this.playedSpecies.length === this.currentTraining.species.length) {
+    if (this.playedSpecies.length === this.currentTraining.species.length - 1) {
       this.playedSpecies = [];
-    }
-    if (this.currentSpecies) {
+    } else if (this.currentSpecies) {
       this.playedSpecies.push(this.currentSpecies.id);
     }
     this.currentSpecies = this.getRandom(this.currentTraining.species, this.playedSpecies);
@@ -148,20 +147,17 @@ export class TrainerComponent implements OnInit {
   }
 
   showCurrentBird() {
-    this.dialog.open(ShowBirdDialogComponent, {
+    this.dialog.open(ShowDialogComponent, {
       width: '450px',
       data: {
         type: 'result',
         result: this.currentSpecies
       }
     });
-    // dialogRef.afterClosed().subscribe(() => {
-    //   console.log('The dialog was closed');
-    // });
   }
 
   showDialog(message: string, cb: () => void = null) {
-    const dialogRef = this.dialog.open(ShowBirdDialogComponent, {
+    const dialogRef = this.dialog.open(ShowDialogComponent, {
       width: '250px',
       data: {
         type: 'message',
@@ -178,12 +174,12 @@ export class TrainerComponent implements OnInit {
 
 @Component({
   selector: 'app-showbird-dialog',
-  templateUrl: './showbird.dialog.html',
+  templateUrl: './dialog.html',
 })
-export class ShowBirdDialogComponent {
+export class ShowDialogComponent {
 
   constructor(
-    public dialogRef: MatDialogRef<ShowBirdDialogComponent>,
+    public dialogRef: MatDialogRef<ShowDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {type: string, result?: Species, message?: string}) {}
 
   close(): void {

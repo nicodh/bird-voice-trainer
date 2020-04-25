@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { ApiService, AutoSuggestItem } from '../../services/apiService';
 import { AudioService } from '../../services/audioService';
@@ -6,6 +6,7 @@ import { PersistenceService } from '../../services/persistenceService';
 import { StreamState } from '../../services/streamState';
 import { Observable, from } from 'rxjs';
 import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 import { Recording, Species } from '../../../sharedTypes';
 
@@ -50,7 +51,8 @@ export class ImportComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private audioService: AudioService,
-    private persistenceService: PersistenceService
+    private persistenceService: PersistenceService,
+    public dialog: MatDialog
     ) {
       this.audioService.getState()
       .subscribe(state => {
@@ -73,9 +75,9 @@ export class ImportComponent implements OnInit {
       debounceTime(500),
       tap(() => this.isLoading = true),
       switchMap(value => this.apiService.getAutoSuggests(value)
-      .pipe(
-        finalize(() => this.isLoading = false),
-      )
+        .pipe(
+          finalize(() => this.isLoading = false),
+        )
       )
     );
     this.species$ = from(this.persistenceService.loadSpecies());
@@ -97,6 +99,13 @@ export class ImportComponent implements OnInit {
     console.log(selectedOption);
     this.loadingRecords = true;
     this.selectedSpecies = selectedOption;
+    const addImage = (imageUrl: string) => {
+      console.log('imageUrls', imageUrl);
+    };
+    const callback = (imageUrls) => {
+      this.showDialog(imageUrls, addImage);
+    };
+    this.apiService.getImagesForSpecies(this.selectedSpecies.species, callback);
     this.searchFieldControl.patchValue(selectedOption.common_name);
     this.recordings$ = this.apiService.getRecordsForSpecies(selectedOption.species);
   }
@@ -137,7 +146,7 @@ export class ImportComponent implements OnInit {
     } else {
       console.log('add', recording);
       this.selectedRecordings.push(recording);
-    } 
+    }
     evt.stopPropagation();
   }
 
@@ -160,4 +169,38 @@ export class ImportComponent implements OnInit {
     this.audioService.stop();
   }
 
+  showDialog(images: string[], cb: (selectedImage: string) => void = null) {
+    const dialogRef = this.dialog.open(ImportDialogComponent, {
+      width: '550px',
+      data: {
+        type: 'image',
+        images
+      }
+    });
+    dialogRef.afterClosed().subscribe((selectedImage: string) => {
+      if (cb) {
+        cb(selectedImage);
+      }
+    });
+  }
+
+}
+
+@Component({
+  selector: 'app-import-image-dialog',
+  templateUrl: './dialog.html',
+})
+export class ImportDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<ImportDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: {type: string, images: string[], image: string}) {}
+
+  selectImage(image): void {
+    this.dialogRef.close(image);
+  }
+
+  cancel(): void {
+    this.dialogRef.close();
+  }
 }
