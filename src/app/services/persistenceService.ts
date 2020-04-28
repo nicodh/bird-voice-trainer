@@ -66,6 +66,14 @@ export class PersistenceService {
     return this.db.species.delete(speciesId);
   }
 
+  deleteTraining(trainingsId: number) {
+    this.db.trainingSpecies.where('training').equals(trainingsId).delete().then(
+      deleted => console.log('deleted trainings: ' + deleted),
+      err => console.log('error deleting trainings', err)
+    );
+    return this.db.trainings.delete(trainingsId);
+  }
+
   addRecordings(recordings: Recording[]) {
     return this.db.recordings.bulkAdd(recordings);
   }

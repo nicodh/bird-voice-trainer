@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { PersistenceService } from '../../services/persistenceService';
 import { Training } from '../../../sharedTypes';
-import { MessageDialogComponent } from '../dialogs/messageDialog.component';
+import { MessageDialogComponent, ConfirmDialogComponent } from '../dialogs';
 import {MatDialog } from '@angular/material/dialog';
 
 
@@ -34,6 +34,8 @@ export class SettingsComponent implements OnInit {
   hideUnselected = false;
 
   importedFile = null;
+
+  showImport = false;
 
   constructor(
     private persistenceService: PersistenceService,
@@ -131,6 +133,23 @@ export class SettingsComponent implements OnInit {
     dialogRef.afterClosed().subscribe(() => {
       if (cb) {
         cb();
+      }
+    });
+  }
+
+  confirmDelete(training: Training) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Do you really want to delete ' + training.name + '?'
+      }
+    });
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.persistenceService.deleteTraining(training.id).then(
+          () => this.trainings = this.trainings.filter(s => s.id !== training.id),
+          err => console.log('Species could not be deleted: ', err)
+        );
       }
     });
   }

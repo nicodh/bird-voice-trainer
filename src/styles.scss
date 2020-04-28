@@ -3,6 +3,10 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.content {
+  font-size: 18px;
+}
+
 .header {
   height: 160px;
   display: flex;
@@ -27,7 +31,7 @@ ul {
     min-height: 3rem;
     span.content {
       display: block;
-      padding-top: 0.5rem;
+      padding-top: 0.7rem;
     }
     span.icon-wrapper {
       display: block;
@@ -37,43 +41,75 @@ ul {
         margin: 5px 10px;
       }
     }
+    &.pseudo-button {
+      cursor: pointer;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      text-align: center;
+      padding-top: 1.5rem;
+      margin: 1rem;
+      float: left;
+      position: relative;
+      &:hover {
+        background-color: #efefef;
+      }
+      span {
+        padding: 1rem 5rem;
+      }
+      &.selected {
+        background-color: #daf5da;
+        &:hover {
+          background-color: #c6e7c6;
+        }
+      }
+    }
   }
 }
 
-ul.recordings li,
-ul.species-list li {
+ul.recordings li {
   display: none;
   &.visible {
     display: block;
   }
-  .content {
+  span {
     float: left;
+    padding: 0.7rem 1rem 1rem 5rem;
+    width: 40rem;
+    text-align: left;
   }
   mat-icon {
     float: left;
+    &.align-right {
+      position: absolute;
+      right: 1rem;
+    }
+  }
+  &.pseudo-button {
+    width: 100%;
+    padding: 1rem 0 0.9rem 0;
+    cursor: default;
+  }
+  &.bold {
+    font-weight: 500;
   }
 }
 
-.recordings {
-  ul li {
-    min-height: 5rem;
-  }
-}
 
-
-li.species-item,
+ul.species-list li,
 ul.training-list li {
-  cursor: pointer;
-  svg-icon {
-    margin: -8px 8px;
-    position: absolute;
+  &.pseudo-button {
+    mat-icon {
+      position: absolute;
+      right: 0.2rem;
+    }
   }
+  width: 46%;
 }
 
 .pointer {
   cursor: pointer;
 }
-Next bird 
+
 .mat-checkbox-inner-container {
   width: 24px;
   height: 24px;
@@ -88,7 +124,7 @@ mat-icon {
     }
   }
   &.medium {
-    font-size: 2.5rem;
+    font-size: 3rem;
   }
   &.small {
     font-size: 1rem;
@@ -103,10 +139,59 @@ mat-icon {
   margin: 0 1rem;
 }
 
+button.mat-stroked-button {
+  font-size: 1.2rem;
+}
+
+
+.loader{
+  margin: 0 0 2em;
+  height: 100px;
+  text-align: center;
+  padding: 1em;
+  margin: 0 auto 1em;
+  display: block;
+  svg path,
+  svg rect{
+    fill: rgb(13, 69, 77);
+  }
+}
+
 /* fallback */
 @font-face {
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
   src: url(./assets/fonts/MaterialIcons-Outlined.woff2) format('woff2');
+}
+
+#ndh {
+  position: absolute;
+  transform: rotate(-90deg);
+  a {
+    color: #bbb;
+  }
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 767px) {
+
+  .card-container > *:not(.circle-link) ,
+  .terminal {
+    width: 100%;
+  }
+
+  .card:not(.highlight-card) {
+    height: 16px;
+    margin: 8px 0;
+  }
+
+  .card.highlight-card span {
+    margin-left: 72px;
+  }
+  
+}
+
+@media screen and (max-width: 575px) {
+  
 }

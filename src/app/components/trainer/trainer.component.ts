@@ -16,7 +16,7 @@ export class TrainerComponent implements OnInit {
   trainings: Array<{ name: string; }>;
 
   constructor(
-    private dbService: PersistenceService,
+    private persistenceService: PersistenceService,
     private audioService: AudioService,
     public dialog: MatDialog
     ) { }
@@ -43,13 +43,13 @@ export class TrainerComponent implements OnInit {
 
   ngOnInit(): void {
     this.resultFieldControl = new FormControl('');
-    this.dbService.getTrainings().then(
+    this.persistenceService.getTrainings().then(
       (trainings: Array<{ name: string; }>) => this.trainings = trainings
     );
   }
 
-  loadTraining(training) {
-    this.dbService.loadTraining(training.id).then(
+  loadTraining(training: Training) {
+    this.persistenceService.loadTraining(training.id).then(
       loadedTraining => {
         this.currentTraining = loadedTraining;
       }
@@ -74,7 +74,7 @@ export class TrainerComponent implements OnInit {
     }
     this.currentSpecies = this.getRandom(this.currentTraining.species, this.playedSpecies);
     console.log(this.currentSpecies);
-    this.dbService.getRecordsBySpecies(this.currentSpecies.id).toArray().then(
+    this.persistenceService.getRecordsBySpecies(this.currentSpecies.id).toArray().then(
       recordings => {
         this.currentRecordings = recordings;
         this.currentRecording = this.getRandom(recordings, this.playedRecordings);
@@ -109,7 +109,7 @@ export class TrainerComponent implements OnInit {
     );
   }
 
-  onOptionSelected(species) {
+  onOptionSelected(species: Species) {
     console.log(species);
     if (species.id === this.currentSpecies.id) {
       console.log('Success');
@@ -147,9 +147,13 @@ export class TrainerComponent implements OnInit {
     this.playing = false;
   }
 
+  deleteTraining(trainingsId: number) {
+    
+  }
+
   showCurrentBird() {
     this.dialog.open(ShowDialogComponent, {
-      width: '450px',
+      width: '550px',
       data: {
         type: 'result',
         result: this.currentSpecies

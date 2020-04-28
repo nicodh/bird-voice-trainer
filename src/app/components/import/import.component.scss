@@ -5,6 +5,7 @@
 
 form.search-form {
   display: block;
+  text-align: center;
   button {
     margin: 5px;
   }
@@ -13,19 +14,6 @@ form.search-form {
 .species-info {
   font-size: 1.5rem;
   margin-bottom: 1.2rem;
-}
-
-.loader{
-  margin: 0 0 2em;
-  height: 100px;
-  text-align: center;
-  padding: 1em;
-  margin: 0 auto 1em;
-  display: block;
-  svg path,
-  svg rect{
-    fill: rgb(13, 69, 77);
-  }
 }
 
 

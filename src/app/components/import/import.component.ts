@@ -1,11 +1,11 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { ApiService, AutoSuggestItem } from '../../services/apiService';
 import { AudioService } from '../../services/audioService';
 import { PersistenceService } from '../../services/persistenceService';
 import { StreamState } from '../../services/streamState';
 import { Observable, from } from 'rxjs';
-import { debounceTime, switchMap, tap, finalize, take } from 'rxjs/operators';
+import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
 import {MatDialog } from '@angular/material/dialog';
 import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent } from '../dialogs/';
 
@@ -172,7 +172,7 @@ export class ImportComponent implements OnInit {
   toggleRecord(evt, recording: Recording) {
     if (this.isSelected(recording)) {
       console.log('remove', recording);
-      this.selectedRecordings = this.selectedRecordings.filter(r => r !== recording);
+      this.selectedRecordings = this.selectedRecordings.filter(r => r.id !== recording.id);
     } else {
       console.log('add', recording);
       this.selectedRecordings.push(recording);

@@ -1,6 +1,6 @@
 {
   "name": "bird-voice-trainer",
-  "version": "0.0.0",
+  "version": "0.9.0",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -26,8 +26,10 @@
     "@angular/service-worker": "~9.1.1",
     "angular-svg-icon": "^9.2.0",
     "dexie": "^2.0.4",
+    "dexie-export-import": "^1.0.0-rc.2",
     "express": "^4.17.1",
     "http-proxy": "^1.18.0",
+    "material-design-icons": "^3.0.1",
     "rxjs": "~6.5.4",
     "tslib": "^1.10.0",
     "zone.js": "~0.10.2"

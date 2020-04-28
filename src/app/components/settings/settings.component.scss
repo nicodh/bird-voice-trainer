@@ -2,15 +2,12 @@
   text-align: center;
 }
 
-ul.species-list {
-  margin: auto;
-  width: 500px;
-  text-align: left;
-  padding-left: 200px;
+.species-list mat-icon {
+  right: 1rem;
+  bottom: 2rem;
 }
 
 #footer {
-  position: absolute;
-  bottom: 1rem;
+  margin-top: 5rem;
   text-align: center;
 }

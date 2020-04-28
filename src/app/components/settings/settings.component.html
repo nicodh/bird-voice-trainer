@@ -7,40 +7,47 @@
       <input matInput 
         placeholder="Enter name"
         [formControl]="trainingNameFieldControl" />
-    </mat-form-field>
+    </mat-form-field><br />
     <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedSpecies.length > 0">
       <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
     </button>
+    <button mat-stroked-button (click)="saveTraining()">
+      Save training
+    </button>
+    <button mat-stroked-button (click)="cancel()">
+      Cancel
+    </button>
   </form>
   <ul class="species-list">
-    <li *ngFor="let species of allSpecies" class="pointer" (click)="toggleSpecies($event, species)" [class.visible]="!hideUnselected || (hideUnselected && isSelected(species))" >
-      <span class="content">
-        {{species.name}} ({{species.taxonomicName}})
+    <li *ngFor="let species of allSpecies" 
+      class="pseudo-button" 
+      (click)="toggleSpecies($event, species)"
+      [class.selected]="isSelected(species)"
+      [class.visible]="!hideUnselected || (hideUnselected && isSelected(species))"
+    >
+      <span>
+        {{species.name}}
       </span>
-      <mat-icon *ngIf="!isSelected(species)" class="medium"  >add_to_photos</mat-icon>
-      <mat-icon *ngIf="isSelected(species)" class="medium green" >library_add_check</mat-icon>
+      <mat-icon *ngIf="!isSelected(species)" class="medium align-right" >check_box_outline_blank</mat-icon>
+      <mat-icon *ngIf="isSelected(species)" class="medium align-right green" >check_box_outline</mat-icon>
     </li>
   </ul>
-  <button mat-stroked-button (click)="saveTraining()">
-    Save training
-  </button>
-  <button mat-stroked-button (click)="cancel()">
-    Cancel
-  </button>
 </div>
 
 <ul *ngIf="!showForm" class="training-list">
-  <li *ngFor="let training of trainings" >
-    <a (click)="editTraining(training)">
-     {{training.name}}  <svg-icon src="assets/icons/icons-edit.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
-    </a>
+  <li *ngFor="let training of trainings"class="pseudo-button">
+    <span (click)="editTraining(training)">
+      {{training.name}}
+    </span>
+     <mat-icon class="red" (click)="confirmDelete(training)">highlight_off</mat-icon>
   </li>
 </ul>
 
 <div id="footer">
   <button mat-stroked-button (click)="exportDB()">Export Backup</button>
-  <div>
-    <h3>Import Backup</h3> <input mat-stroked-button  type="file" (change)="selectFile($event)" /><br />
+  <button mat-stroked-button (click)="showImport = true">Import Backup</button>
+  <div *ngIf="showImport">
+     <input mat-stroked-button  type="file" (change)="selectFile($event)" /><br />
     <button *ngIf="importedFile" mat-stroked-button (click)="importDB()">Upload DB</button>
     <button *ngIf="importedFile" mat-stroked-button (click)="unsetFile()">Cancel</button>
   </div> 

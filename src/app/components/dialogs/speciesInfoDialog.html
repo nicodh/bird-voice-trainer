@@ -18,7 +18,7 @@
   
 </style>
 <div style="text-align: center;">
-  <div *ngIf="data.type === 'speciesInfo'">
+  <div *ngIf="data.type === 'speciesInfo' && !data.loading">
     <h3>{{data.species.name}}</h3>
     <p>{{data.species.taxonomicName}}</p>
     <div *ngIf="data.species.image" >
@@ -42,7 +42,7 @@
     </div>
   </div>
 
-  <div class="image-list" *ngIf="data.images && data.type === 'importImages'">
+  <div class="image-list" *ngIf="data.images && data.type === 'importImages' && !data.loading">
     <h2>Images found on Wikimedia</h2>
     <div *ngFor="let image of data.images">
       <img class="pointer" src="{{image.thumburl}}" (click)="selectImage(image.url)" title="Click to select"/>
@@ -55,6 +55,10 @@
         Cancel
       </button>
     </div>
+  </div>
+  <div *ngIf="data.loading">
+      Searching for images on wikimedia.org<br />
+      <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
   </div>
   
 </div>

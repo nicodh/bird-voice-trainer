@@ -3,6 +3,9 @@
     <h1 mat-dialog-title>{{data.result.name}}</h1>
     <div mat-dialog-content>
       <p>{{data.result.taxonomicName}}</p>
+      <div *ngIf="data.result.image" >
+        <img src="{{data.result.image}}" alt="{{data.result.name}}" height="350px"/>
+      </div>
     </div>
   </div>
   <div mat-dialog-actions >

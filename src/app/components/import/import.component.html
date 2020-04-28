@@ -14,35 +14,38 @@
   </mat-form-field>
 
   <mat-icon title="species info" class="medium pointer" (click)="showInfoDialog()" *ngIf="currentSpecies">info_outline</mat-icon>
-  
+  <br />
   <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedRecordings.length > 0">
     <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
   </button>
   <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save</button>
   <button mat-stroked-button (click)="viewMode = 'default'" *ngIf="viewMode !== 'default'">Cancel</button>
-  
   <div class="loader" *ngIf="(loadingRecords && !(recordings$ | async)) || isLoading">
     <div *ngIf="loadingRecords">Loading recordings from www.xeno-canto.org</div>
-    <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':24 }"></svg-icon>
+    <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
   </div>
-  <div class="recordings"  *ngIf="!isLoading && viewMode!='default'">
-    <ul>
-      <li *ngFor="let recording of (recordings$ | async)?.slice(startFrom, limitTo); index as i;" [class.bold]="currentIndex === i"  [class.visible]="!hideUnselected || (hideUnselected && isSelected(recording))">
-          <mat-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" class="medium material-icons-outlined">play_circle_outline</mat-icon>
+  <div *ngIf="!isLoading && viewMode!='default'">
+    <ul class="recordings" >
+      <li *ngFor="let recording of (recordings$ | async)?.slice(startFrom, limitTo); index as i;"
+        class="pseudo-button"
+        [class.bold]="currentIndex === i"
+        [class.selected]="isSelected(recording)"
+        [class.visible]="!hideUnselected || (hideUnselected && isSelected(recording))"
+      >
+          <mat-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" class="medium" >play_circle_outline</mat-icon>
           <mat-icon *ngIf="currentIndex === i" (click)="stop()" class="medium">pause_circle_outline</mat-icon>
           <span class="content pointer" (click)="toggleRecord($event, recording)" >
             Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
           </span>
-            <mat-icon *ngIf="!isSelected(recording)" class="medium" (click)="toggleRecord($event, recording)" >add_to_photos</mat-icon>
-            <mat-icon *ngIf="isSelected(recording)" class="medium green" (click)="toggleRecord($event, recording)" >library_add_check</mat-icon>
+            <mat-icon *ngIf="!isSelected(recording)" class="medium align-right" (click)="toggleRecord($event, recording)" >check_box_outline_blank</mat-icon>
+            <mat-icon *ngIf="isSelected(recording)" class="medium align-right green" (click)="toggleRecord($event, recording)" >check_box_outline</mat-icon>
       </li>
     </ul>
   </div>
 </form>
-<div class="importedSpecies" *ngIf="viewMode == 'default' && showSpeciesList && !isLoading && importedSpecies.length > 0">
-  <h3>Imported species</h3>
-  <ul>
-    <li *ngFor="let species of importedSpecies" class="species-item">
+<div *ngIf="viewMode == 'default' && showSpeciesList && !isLoading && importedSpecies.length > 0">
+  <ul class="species-list" >
+    <li *ngFor="let species of importedSpecies" class="pseudo-button">
       <span (click)="editSpecies(species)">
         {{species.name}} 
       </span>

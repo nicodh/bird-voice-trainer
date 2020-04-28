@@ -16,7 +16,8 @@ export class SpeciesInfoDialogComponent {
       type: string,
       species: Species,
       images: ImageInfo[],
-      updated: boolean
+      updated: boolean,
+      loading: boolean
     }) {}
 
     selectImage(image: string): void {
@@ -34,9 +35,11 @@ export class SpeciesInfoDialogComponent {
     }
 
     searchImages(taxonomicName: string) {
+      this.data.loading = true;
       const callback = (images: ImageInfo[]) => {
         this.data.type = 'importImages';
         this.data.images = images;
+        this.data.loading = false;
       };
       this.apiService.getImagesForSpecies(taxonomicName, callback);
     }

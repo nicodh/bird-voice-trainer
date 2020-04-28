@@ -126,49 +126,18 @@
   a:hover {
     color: #125699;
   }
-
- 
-
-
-  /* Responsive Styles */
-  @media screen and (max-width: 767px) {
-
-    .card-container > *:not(.circle-link) ,
-    .terminal {
-      width: 100%;
-    }
-
-    .card:not(.highlight-card) {
-      height: 16px;
-      margin: 8px 0;
-    }
-
-    .card.highlight-card span {
-      margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-      right: 120px;
-      transform: rotate(-5deg);
-    }
-  }
-
-  @media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-      display: none;
-      visibility: hidden;
-    }
-  }
 </style>
 
 <!-- Toolbar -->
 <div class="header">
   <img src="../assets/images/grau-schnaepper.jpg" />
   <img src="../assets/images/rotkehlchen.jpg" />
-  <img src="../assets/images/samtkopf-grasmuecke2.jpg" />
+  <img src="../assets/images/samtkopf-grasmuecke.jpg" />
   <img src="../assets/images/bluthaenfling.jpg" />
 </div>
-
+<div id="ndh">
+  <a href="https://www.ndh-websolutions.de">ndh websolutions</a>
+</div>
 <div class="content" role="main">
 
   
@@ -176,7 +145,7 @@
   <!-- Resources -->
 
   <div class="card-container">
-    <a  class="card" routerLink="/import" routerLinkActive="active">Import data</a>
+    <a  class="card" routerLink="/import" routerLinkActive="active">Import species</a>
 
     <a  class="card" routerLink="/trainer" routerLinkActive="active">Trainer</a>
 
@@ -188,7 +157,6 @@
 
   <!-- Footer -->
   <footer>
-     
   </footer>
 
 </div>
