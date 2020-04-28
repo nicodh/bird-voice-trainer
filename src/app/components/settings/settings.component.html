@@ -8,11 +8,17 @@
         placeholder="Enter name"
         [formControl]="trainingNameFieldControl" />
     </mat-form-field>
+    <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedSpecies.length > 0">
+      <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
+    </button>
   </form>
   <ul class="species-list">
-    <li *ngFor="let species of allSpecies" >
-        <mat-checkbox (click)="toggleSpecies($event, species)" [checked]="isSelected(species)"></mat-checkbox>
-       {{species.name}} ({{species.latin_name}})
+    <li *ngFor="let species of allSpecies" class="pointer" (click)="toggleSpecies($event, species)" [class.visible]="!hideUnselected || (hideUnselected && isSelected(species))" >
+      <span class="content">
+        {{species.name}} ({{species.taxonomicName}})
+      </span>
+      <mat-icon *ngIf="!isSelected(species)" class="medium"  >add_to_photos</mat-icon>
+      <mat-icon *ngIf="isSelected(species)" class="medium green" >library_add_check</mat-icon>
     </li>
   </ul>
   <button mat-stroked-button (click)="saveTraining()">
@@ -30,3 +36,12 @@
     </a>
   </li>
 </ul>
+
+<div id="footer">
+  <button mat-stroked-button (click)="exportDB()">Export Backup</button>
+  <div>
+    <h3>Import Backup</h3> <input mat-stroked-button  type="file" (change)="selectFile($event)" /><br />
+    <button *ngIf="importedFile" mat-stroked-button (click)="importDB()">Upload DB</button>
+    <button *ngIf="importedFile" mat-stroked-button (click)="unsetFile()">Cancel</button>
+  </div> 
+</div>

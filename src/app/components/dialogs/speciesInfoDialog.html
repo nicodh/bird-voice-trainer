@@ -1,0 +1,60 @@
+<style type="css">
+  a{
+   color: #999; 
+  }
+  .image-list {
+    height: 550px;
+    overflow-y: scroll;
+  }
+  caption {
+    display: block;
+  }
+
+  mat-icon {
+    margin: 0;
+    padding: 0;
+    vertical-align: text-top;
+  }
+  
+</style>
+<div style="text-align: center;">
+  <div *ngIf="data.type === 'speciesInfo'">
+    <h3>{{data.species.name}}</h3>
+    <p>{{data.species.taxonomicName}}</p>
+    <div *ngIf="data.species.image" >
+      <img src="{{data.species.image}}" alt="{{data.species.name}}" height="350px"/>
+    </div>
+    <button mat-stroked-button style="margin: auto;" (click)="searchImages(data.species.taxonomicName)">
+      <span *ngIf="!data.species.image" >
+        Add image
+      </span>
+      <span *ngIf="data.species.image" >
+        Update image
+      </span>
+    </button>
+    <div mat-dialog-actions >
+      <button mat-stroked-button style="margin: auto;" (click)="close()">
+        Ok
+      </button>
+      <button mat-stroked-button style="margin: auto;" (click)="cancel()">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <div class="image-list" *ngIf="data.images && data.type === 'importImages'">
+    <h2>Images found on Wikimedia</h2>
+    <div *ngFor="let image of data.images">
+      <img class="pointer" src="{{image.thumburl}}" (click)="selectImage(image.url)" title="Click to select"/>
+      <caption>Size: {{image.width}} x {{image.height}}, {{(image.size / 1000).toFixed(0)}} kB 
+        <a target="_blank" href="{{image.url}}">Wikimedia <mat-icon class="small">call_made</mat-icon></a>
+      </caption><br />
+    </div>
+    <div mat-dialog-actions >
+      <button mat-stroked-button style="margin: auto;" (click)="data.type = 'speciesInfo'">
+        Cancel
+      </button>
+    </div>
+  </div>
+  
+</div>

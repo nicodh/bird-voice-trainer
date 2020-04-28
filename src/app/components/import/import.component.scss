@@ -1,5 +1,5 @@
 :host {
-  width: 700px;
+  width: 54rem;
   margin: auto;
 }
 
@@ -18,12 +18,10 @@ form.search-form {
 .loader{
   margin: 0 0 2em;
   height: 100px;
-  width: 20%;
   text-align: center;
   padding: 1em;
   margin: 0 auto 1em;
-  display: inline-block;
-  vertical-align: top;
+  display: block;
   svg path,
   svg rect{
     fill: rgb(13, 69, 77);
@@ -32,7 +30,7 @@ form.search-form {
 
 
 mat-form-field {
-  width:400px;
+  width:21rem;
   font-size: 1.3rem;
 }
 
@@ -44,30 +42,9 @@ mat-form-field {
   text-align: left;
   ul {
     li {
-      display: none;
-      &.visible {
-        display: block;
+      &.bold {
+        font-weight: 500;
       }
     }
-  }
-}
-
-button.play {
-  box-sizing: border-box;
-  height: 74px;
-  
-  border-color: transparent transparent transparent #202020;
-  transition: 100ms all ease;
-  will-change: border-width;
-  cursor: pointer;
-
-  // play state
-  border-style: solid;
-  border-width: 37px 0 37px 60px;
-
-  // paused state
-  &.pause {
-    border-style: double;
-    border-width: 0px 0 0px 60px;
   }
 }

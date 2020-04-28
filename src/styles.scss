@@ -3,9 +3,19 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+.header {
+  height: 160px;
+  display: flex;
+  justify-content: space-around;
+  img {
+    height: 160px;
+  }
+  padding: 0 30%;
+}
+
 button.mat-stroked-button {
   margin: 1rem;
-  min-width: 10rem;
+  min-width: 8rem;
 }
 
 ul {
@@ -14,10 +24,10 @@ ul {
   li {
     list-style: none;
     font-size: 1.6rem;
-    min-height: 5rem;
+    min-height: 3rem;
     span.content {
       display: block;
-      padding-top: 1rem;
+      padding-top: 0.5rem;
     }
     span.icon-wrapper {
       display: block;
@@ -27,6 +37,26 @@ ul {
         margin: 5px 10px;
       }
     }
+  }
+}
+
+ul.recordings li,
+ul.species-list li {
+  display: none;
+  &.visible {
+    display: block;
+  }
+  .content {
+    float: left;
+  }
+  mat-icon {
+    float: left;
+  }
+}
+
+.recordings {
+  ul li {
+    min-height: 5rem;
   }
 }
 
@@ -47,4 +77,36 @@ Next bird
 .mat-checkbox-inner-container {
   width: 24px;
   height: 24px;
+}
+
+mat-icon {
+  cursor: pointer;
+  &.big {
+    font-size: 5rem;
+    &.center {
+      margin: 0 3rem 3rem 0;
+    }
+  }
+  &.medium {
+    font-size: 2.5rem;
+  }
+  &.small {
+    font-size: 1rem;
+  }
+  &.green {
+    color:#06c006;
+  }
+  &.red {
+    color: #d00909;
+  }
+  vertical-align: text-bottom;
+  margin: 0 1rem;
+}
+
+/* fallback */
+@font-face {
+  font-family: 'Material Icons';
+  font-style: normal;
+  font-weight: 400;
+  src: url(./assets/fonts/MaterialIcons-Outlined.woff2) format('woff2');
 }

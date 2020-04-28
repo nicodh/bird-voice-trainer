@@ -3,7 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { Observable, of } from 'rxjs';
 import { map, catchError } from 'rxjs/operators';
-import { Recording, RecordingsResponse } from '../../sharedTypes';
+import { Recording, RecordingsResponse, ImageInfo } from '../../sharedTypes';
 
 export interface AutoSuggestResponse {
   data: AutoSuggestItem[];
@@ -23,14 +23,7 @@ interface WikimediaResponse {
       [id: number]: {
         pageid: number;
         title: string;
-        imageinfo: [{
-          height: number;
-          width: number;
-          url: string;
-          thumbheight: number;
-          thumbwidth: number;
-          thumburl: string;
-        }]
+        imageinfo: Array<ImageInfo>
       }
     }
   };
@@ -44,6 +37,12 @@ interface WikimediaResponse {
 export class ApiService {
 
   constructor(private http: HttpClient) { }
+
+  minimalRecordingLength = 0.10;
+
+  imageSearchLimit = 50;
+  imageThumbWidth = 350;
+  imageThumbHeight = 350;
 
   getAutoSuggests(searchTerm: string = ''): Observable<AutoSuggestItem[]> {
     const options = {
@@ -68,7 +67,9 @@ export class ApiService {
     };
     return this.http.get(environment.apiUrl + '/api/2/recordings', options).pipe(
       catchError(err => of([])),
-      map((res: RecordingsResponse) => res.recordings)
+      map((res: RecordingsResponse) => res.recordings.filter(
+        (recording: Recording) => Number(recording.length.replace(':', '.')) >= this.minimalRecordingLength)
+      )
     );
   }
 
@@ -76,10 +77,7 @@ export class ApiService {
 
   }
 
-  getImagesForSpecies(name: string, callback: (imageUrls: string[]) => void) {
-    const limit = 50;
-    const thumbWidth = 350;
-    const thumbHeight = 350;
+  getImagesForSpecies(name: string, callback: (images: ImageInfo[]) => void) {
     this.http.get(environment.pageApiUrl + name).subscribe(
       (data: WikimediaResponse) => {
       {
@@ -96,29 +94,28 @@ export class ApiService {
           });
         }
         if (matchingPageId) {
-          const dynamicUrlPart = '&gimlimit=' + limit + '&iiurlwidth=' + thumbWidth + '&iiurlheight=' + thumbHeight;
+          const dynamicUrlPart = '&gimlimit=' + this.imageSearchLimit
+             + '&iiurlwidth=' + this.imageThumbWidth
+             + '&iiurlheight=' + this.imageThumbHeight;
           this.http.get(environment.imageApiUrl + dynamicUrlPart + '&pageids=' + matchingPageId).subscribe(
             (response: WikimediaResponse) => {
-              const imageUrls = [];
+              const images = [];
               Object.values(response.query.pages).forEach(
                 page => {
                   if (page.imageinfo) {
                     page.imageinfo.forEach(
                       imageinfo => {
-                        imageUrls.push(imageinfo.thumburl);
+                        images.push(imageinfo);
                       }
                     );
                   }
                 }
               );
-              callback(imageUrls);
+              callback(images);
             }
           );
         }
       }
     });
   }
-
-  // https://commons.wikimedia.org/w/api.php?format=json&action=query&list=search&srprop=size&srlimit=30&srsearch=morelike%3AKohlmeise
-
 }

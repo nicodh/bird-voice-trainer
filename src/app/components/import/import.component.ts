@@ -5,8 +5,9 @@ import { AudioService } from '../../services/audioService';
 import { PersistenceService } from '../../services/persistenceService';
 import { StreamState } from '../../services/streamState';
 import { Observable, from } from 'rxjs';
-import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { debounceTime, switchMap, tap, finalize, take } from 'rxjs/operators';
+import {MatDialog } from '@angular/material/dialog';
+import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent } from '../dialogs/';
 
 import { Recording, Species } from '../../../sharedTypes';
 
@@ -27,9 +28,9 @@ export class ImportComponent implements OnInit {
 
   suggestions$: Observable<AutoSuggestItem[]>;
 
-  selectedSpecies: AutoSuggestItem;
+  selectedOption: AutoSuggestItem;
 
-  editedSpecies: Species;
+  currentSpecies: Species;
 
   recordings$: Observable<Recording[]>;
 
@@ -41,7 +42,9 @@ export class ImportComponent implements OnInit {
 
   hideUnselected = false;
 
-  species$: Observable<Species[]>;
+  importedSpecies: Species[] = [];
+
+  selectedImageUrl: string;
 
   viewMode = 'default';
 
@@ -64,7 +67,8 @@ export class ImportComponent implements OnInit {
     this.selectedRecordings = [];
     this.searchFieldControl.patchValue('');
     this.recordings$ = from([]);
-    this.selectedSpecies = null;
+    this.selectedOption = null;
+    this.currentSpecies = null;
     this.viewMode = 'default';
     this.loadingRecords = false;
     this.isLoading = false;
@@ -80,7 +84,9 @@ export class ImportComponent implements OnInit {
         )
       )
     );
-    this.species$ = from(this.persistenceService.loadSpecies());
+    this.persistenceService.loadSpecies().then(
+      species => this.importedSpecies = species
+    );
   }
 
   editSpecies(species: Species) {
@@ -88,8 +94,8 @@ export class ImportComponent implements OnInit {
     this.viewMode = 'edit';
     this.loadingRecords = true;
     this.searchFieldControl.patchValue(species.name);
-    this.editedSpecies = species;
-    this.recordings$ = this.apiService.getRecordsForSpecies(species.latin_name);
+    this.currentSpecies = species;
+    this.recordings$ = this.apiService.getRecordsForSpecies(species.taxonomicName);
     this.persistenceService.getRecordsBySpecies(species.id).toArray().then(
       recordings => this.selectedRecordings = recordings
     );
@@ -98,14 +104,20 @@ export class ImportComponent implements OnInit {
   onOptionSelected(selectedOption: AutoSuggestItem) {
     console.log(selectedOption);
     this.loadingRecords = true;
-    this.selectedSpecies = selectedOption;
-    const addImage = (imageUrl: string) => {
-      console.log('imageUrls', imageUrl);
-    };
-    const callback = (imageUrls) => {
-      this.showDialog(imageUrls, addImage);
-    };
-    this.apiService.getImagesForSpecies(this.selectedSpecies.species, callback);
+    this.selectedOption = selectedOption;
+    const existing = this.importedSpecies.find(species => species.taxonomicName === selectedOption.species);
+    if (existing) {
+      this.editSpecies(existing);
+      return;
+    } else {
+      this.currentSpecies = {
+        id: 0,
+        name: selectedOption.common_name,
+        taxonomicName: selectedOption.species,
+        image: '',
+        recordings: Number(selectedOption.recordings)
+      };
+    }
     this.searchFieldControl.patchValue(selectedOption.common_name);
     this.recordings$ = this.apiService.getRecordsForSpecies(selectedOption.species);
   }
@@ -117,25 +129,43 @@ export class ImportComponent implements OnInit {
   async saveRecordings() {
     this.audioService.stop();
     console.log(this.selectedRecordings);
-    let speciesId = 0;
-    if (this.editedSpecies) {
-      speciesId = this.editedSpecies.id;
-    } else {
-      speciesId = await this.persistenceService.addSpecies(
-        {name: this.selectedSpecies.common_name, latin_name: this.selectedSpecies.species, }
-      );
-    }
+    const speciesId = await this.saveSpecies();
     const preparedRecordings = this.selectedRecordings.map(recording => {
       return {species: speciesId, ...recording};
     });
     this.persistenceService.addRecordings(preparedRecordings).then(
-      count => console.log(count),
+      () => {
+        this.showDialog(preparedRecordings.length + ' recordings saved!');
+      },
       err => console.log(err)
     );
     this.reset();
   }
 
-  isSelected(recording) {
+  async saveSpecies(): Promise<number> {
+    let speciesId = 0;
+    if (this.currentSpecies.id) {
+      speciesId = this.currentSpecies.id;
+      this.persistenceService.updateSpeciesImage(
+        speciesId,
+        this.currentSpecies.image
+      );
+    } else {
+      speciesId = await this.persistenceService.addSpecies(
+        {
+          name: this.selectedOption.common_name,
+          taxonomicName: this.selectedOption.species,
+        }
+      );
+      this.currentSpecies.id = speciesId;
+    }
+    this.persistenceService.loadSpecies().then(
+      species => this.importedSpecies = species
+    );
+    return speciesId;
+  }
+
+  isSelected(recording: Recording) {
     return this.selectedRecordings.find(selectedRecording => selectedRecording.id === recording.id );
   }
 
@@ -169,38 +199,54 @@ export class ImportComponent implements OnInit {
     this.audioService.stop();
   }
 
-  showDialog(images: string[], cb: (selectedImage: string) => void = null) {
-    const dialogRef = this.dialog.open(ImportDialogComponent, {
+  showInfoDialog() {
+    const species = this.currentSpecies ? this.currentSpecies : this.selectedOption;
+    const dialogRef = this.dialog.open(SpeciesInfoDialogComponent, {
       width: '550px',
       data: {
-        type: 'image',
-        images
+        type: 'speciesInfo',
+        species,
+        updated: false
       }
     });
-    dialogRef.afterClosed().subscribe((selectedImage: string) => {
+    dialogRef.afterClosed().subscribe((updated: boolean) => {
+      if(updated) {
+        this.saveSpecies();
+      }
+    });
+  }
+
+  confirmDelete(species: Species) {
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '350px',
+      data: {
+        message: 'Do you really want to delete ' + species.name + ' and all recordings?'
+      }
+    });
+    dialogRef.afterClosed().subscribe((confirmed: boolean) => {
+      if (confirmed) {
+        this.persistenceService.deleteSpecies(species.id).then(
+          () => this.importedSpecies = this.importedSpecies.filter(s => s.id !== species.id),
+          err => console.log('Species could not be deleted: ', err)
+        );
+      }
+    });
+  }
+
+  showDialog(message: string, cb: () => void = null) {
+    const dialogRef = this.dialog.open(MessageDialogComponent, {
+      width: '250px',
+      data: {
+        type: 'message',
+        message
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
       if (cb) {
-        cb(selectedImage);
+        cb();
       }
     });
   }
 
-}
-
-@Component({
-  selector: 'app-import-image-dialog',
-  templateUrl: './dialog.html',
-})
-export class ImportDialogComponent {
-
-  constructor(
-    public dialogRef: MatDialogRef<ImportDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {type: string, images: string[], image: string}) {}
-
-  selectImage(image): void {
-    this.dialogRef.close(image);
-  }
-
-  cancel(): void {
-    this.dialogRef.close();
-  }
+  
 }

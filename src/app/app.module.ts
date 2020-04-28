@@ -7,7 +7,7 @@ import { AppComponent } from './app.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { SettingsComponent } from './components/settings/settings.component';
 import { TrainerComponent, ShowDialogComponent } from './components/trainer/trainer.component';
-import { ImportComponent, ImportDialogComponent } from './components/import/import.component';
+import { ImportComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { ApiService } from './services/apiService';
 import { PersistenceService } from './services/persistenceService';
@@ -20,7 +20,14 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
 
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatIconModule } from '@angular/material/icon';
+
 import { AngularSvgIconModule } from 'angular-svg-icon';
+import { 
+  MessageDialogComponent,
+  SpeciesInfoDialogComponent,
+  ConfirmDialogComponent
+} from './components/dialogs/';
 
 
 @NgModule({
@@ -30,7 +37,9 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     TrainerComponent,
     ImportComponent,
     ShowDialogComponent,
-    ImportDialogComponent
+    MessageDialogComponent,
+    SpeciesInfoDialogComponent,
+    ConfirmDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -45,6 +54,7 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
     MatCheckboxModule,
     MatButtonModule,
     MatDialogModule,
+    MatIconModule,
     HttpClientModule,
     HttpClientJsonpModule,
     AngularSvgIconModule.forRoot()

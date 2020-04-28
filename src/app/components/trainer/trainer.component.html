@@ -7,8 +7,8 @@
 </ul>
 <div *ngIf="currentTraining" class="training-display">
 <h3>{{currentTraining.name}}</h3>
-<svg-icon *ngIf="!playing" (click)="start()" src="assets/icons/play-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
-<svg-icon *ngIf="playing" (click)="pause()" src="assets/icons/pause-button.svg" [svgStyle]="{ 'width.px':54 }"></svg-icon>
+<mat-icon *ngIf="!playing" (click)="start()" class="big center">play_circle_outline</mat-icon>
+<mat-icon *ngIf="playing" (click)="pause()" class="big center">pause_circle_outline</mat-icon>
 
 <p></p>
 <mat-form-field class="search-field">
@@ -30,17 +30,13 @@
       <span class="content" >
       Next sound 
     </span>
-    <span class="icon-wrapper">
-      <svg-icon src="assets/icons/next.svg" [svgStyle]="{ 'width.px':36 }"></svg-icon>
-    </span>
+      <mat-icon class="medium">skip_next</mat-icon>
     </li>
     <li class="pointer" (click)="nextSpecies()">
       <span class="content" >
         Next bird 
       </span>
-      <span class="icon-wrapper">
-        <svg-icon src="assets/icons/next.svg" [svgStyle]="{ 'width.px':36 }"></svg-icon>
-      </span>
+        <mat-icon class="medium">skip_next</mat-icon>
     </li>
     <li>
       <button mat-stroked-button (click)="showCurrentBird()">Show bird</button>

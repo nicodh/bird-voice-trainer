@@ -3,6 +3,7 @@ import { PersistenceService } from '../../services/persistenceService';
 import { Training, Species, Recording } from 'src/sharedTypes';
 import { AudioService } from '../../services/audioService';
 import {FormControl} from '@angular/forms';
+import { MessageDialogComponent } from '../dialogs/messageDialog.component';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
@@ -157,7 +158,7 @@ export class TrainerComponent implements OnInit {
   }
 
   showDialog(message: string, cb: () => void = null) {
-    const dialogRef = this.dialog.open(ShowDialogComponent, {
+    const dialogRef = this.dialog.open(MessageDialogComponent, {
       width: '250px',
       data: {
         type: 'message',
@@ -180,7 +181,7 @@ export class ShowDialogComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ShowDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: {type: string, result?: Species, message?: string}) {}
+    @Inject(MAT_DIALOG_DATA) public data: {type: string, result?: Species}) {}
 
   close(): void {
     this.dialogRef.close();

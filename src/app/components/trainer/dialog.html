@@ -1,12 +1,8 @@
 <div style="text-align: center;">
-  <div *ngIf="data.type == 'message'">
-    <p>{{data.message}}</p>
-  </div>
-
   <div *ngIf="data.type == 'result'">
     <h1 mat-dialog-title>{{data.result.name}}</h1>
     <div mat-dialog-content>
-      <p>{{data.result.latin_name}}</p>
+      <p>{{data.result.taxonomicName}}</p>
     </div>
   </div>
   <div mat-dialog-actions >

@@ -16,7 +16,9 @@ export interface RecordingsResponse {
 export interface Species {
   id: number;
   name: string;
-  latin_name: string;
+  taxonomicName: string;
+  image: string;
+  recordings: number;
 }
 
 export interface Recording {
@@ -50,4 +52,14 @@ export interface Recording {
   uploaded: string;
   also: Array<string>,
   rmk: string;
-};
+}
+
+export interface ImageInfo {
+  height: number;
+  width: number;
+  url: string;
+  thumbheight: number;
+  thumbwidth: number;
+  thumburl: string;
+  size: number;
+}
