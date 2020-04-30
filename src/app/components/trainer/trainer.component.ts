@@ -41,7 +41,16 @@ export class TrainerComponent implements OnInit {
 
   playedRecordings: number[] = [];
 
+  matches: 0;
+  wrongGuesses: 0;
+
   ngOnInit(): void {
+    document.onkeydown = (evt) => {
+      console.log(evt);
+      if (this.currentTraining && evt.code === 'Space') {
+        this.playing ? this.pause() : this.play();
+      }
+    };
     this.resultFieldControl = new FormControl('');
     this.persistenceService.getTrainings().then(
       (trainings: Array<{ name: string; }>) => this.trainings = trainings
@@ -62,6 +71,21 @@ export class TrainerComponent implements OnInit {
       return;
     }
     this.nextSpecies();
+  }
+
+  reset() {
+    this.currentTraining = null;
+    this.currentSpecies = null;
+    this.currentRecordings = [];
+    this.playedRecordings = [];
+    this.playedSpecies = [];
+    this.matches = 0;
+    this.wrongGuesses = 0;
+  }
+
+  finishTraining() {
+    this.stop();
+    this.reset();
   }
 
   nextSpecies() {
@@ -113,9 +137,11 @@ export class TrainerComponent implements OnInit {
     console.log(species);
     if (species.id === this.currentSpecies.id) {
       console.log('Success');
+      this.matches++;
       this.showDialog('Correct :-)', () => this.nextSpecies());
       this.audioService.stop();
     } else {
+      this.wrongGuesses++;
       this.showDialog('Not correct :-(');
     }
   }
@@ -148,7 +174,7 @@ export class TrainerComponent implements OnInit {
   }
 
   deleteTraining(trainingsId: number) {
-    
+
   }
 
   showCurrentBird() {

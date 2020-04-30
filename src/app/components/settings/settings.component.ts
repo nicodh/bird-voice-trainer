@@ -76,6 +76,18 @@ export class SettingsComponent implements OnInit {
   }
 
   saveTraining() {
+    const name = this.trainingNameFieldControl.value;
+    if (name.length < 1) {
+      this.showDialog('Please enter a name');
+      return;
+    }
+    if (!this.currentTraining) {
+      const existing = this.trainings.filter(training => training.name === name);
+      if (existing) {
+        this.showDialog('There is already a training with name "' + name + '". Please choose another name');
+        return;
+      }
+    }
     const onSuccess = () => {
       this.cancel();
       this.refreshTrainings();
@@ -124,7 +136,7 @@ export class SettingsComponent implements OnInit {
 
   showDialog(message: string, cb: () => void = null) {
     const dialogRef = this.dialog.open(MessageDialogComponent, {
-      width: '250px',
+      width: '350px',
       data: {
         type: 'message',
         message

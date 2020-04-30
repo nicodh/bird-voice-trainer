@@ -15,6 +15,12 @@
     padding: 0;
     vertical-align: text-top;
   }
+
+  .mat-dialog-actions {
+    width: 70%;
+    margin: auto;
+    margin-top: 2rem;
+  }
   
 </style>
 <div style="text-align: center;">
@@ -22,7 +28,7 @@
     <h3>{{data.species.name}}</h3>
     <p>{{data.species.taxonomicName}}</p>
     <div *ngIf="data.species.image" >
-      <img src="{{data.species.image}}" alt="{{data.species.name}}" height="350px"/>
+      <img src="{{data.species.image}}" alt="{{data.species.name}}" width="90%"/>
     </div>
     <button mat-stroked-button style="margin: auto;" (click)="searchImages(data.species.taxonomicName)">
       <span *ngIf="!data.species.image" >

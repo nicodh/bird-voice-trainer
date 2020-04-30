@@ -29,8 +29,6 @@ interface WikimediaResponse {
   };
 }
 
-
-
 @Injectable({
   providedIn: 'root'
 })

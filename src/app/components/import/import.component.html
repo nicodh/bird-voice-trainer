@@ -13,13 +13,13 @@
     </mat-autocomplete>
   </mat-form-field>
 
-  <mat-icon title="species info" class="medium pointer" (click)="showInfoDialog()" *ngIf="currentSpecies">info_outline</mat-icon>
+  <mat-icon title="species info" class="medium pointer info" (click)="showInfoDialog()" *ngIf="currentSpecies">info_outline</mat-icon>
   <br />
   <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedRecordings.length > 0">
     <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
   </button>
   <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save</button>
-  <button mat-stroked-button (click)="viewMode = 'default'" *ngIf="viewMode !== 'default'">Cancel</button>
+  <button mat-stroked-button (click)="reset()" *ngIf="viewMode !== 'default'">Cancel</button>
   <div class="loader" *ngIf="(loadingRecords && !(recordings$ | async)) || isLoading">
     <div *ngIf="loadingRecords">Loading recordings from www.xeno-canto.org</div>
     <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
@@ -32,13 +32,17 @@
         [class.selected]="isSelected(recording)"
         [class.visible]="!hideUnselected || (hideUnselected && isSelected(recording))"
       >
+        <div class="icon-wrap">
           <mat-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" class="medium" >play_circle_outline</mat-icon>
           <mat-icon *ngIf="currentIndex === i" (click)="stop()" class="medium">pause_circle_outline</mat-icon>
-          <span class="content pointer" (click)="toggleRecord($event, recording)" >
-            Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
-          </span>
+        </div>
+        <span class="content pointer" (click)="toggleRecord($event, recording)" >
+          Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
+        </span>
+        <div class="icon-wrap">
             <mat-icon *ngIf="!isSelected(recording)" class="medium align-right" (click)="toggleRecord($event, recording)" >check_box_outline_blank</mat-icon>
             <mat-icon *ngIf="isSelected(recording)" class="medium align-right green" (click)="toggleRecord($event, recording)" >check_box_outline</mat-icon>
+        </div>
       </li>
     </ul>
   </div>

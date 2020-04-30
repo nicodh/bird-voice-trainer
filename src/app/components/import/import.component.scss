@@ -1,5 +1,4 @@
 :host {
-  width: 54rem;
   margin: auto;
 }
 
@@ -9,6 +8,10 @@ form.search-form {
   button {
     margin: 5px;
   }
+  mat-icon {
+    vertical-align: sub;
+  }
+
 }
 
 .species-info {

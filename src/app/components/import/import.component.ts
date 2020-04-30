@@ -63,7 +63,7 @@ export class ImportComponent implements OnInit {
       });
     }
 
-  private reset() {
+  public reset() {
     this.selectedRecordings = [];
     this.searchFieldControl.patchValue('');
     this.recordings$ = from([]);
@@ -76,7 +76,7 @@ export class ImportComponent implements OnInit {
 
   ngOnInit(): void {
     this.suggestions$ = this.searchFieldControl.valueChanges.pipe(
-      debounceTime(500),
+      debounceTime(700),
       tap(() => this.isLoading = true),
       switchMap(value => this.apiService.getAutoSuggests(value)
         .pipe(
@@ -247,6 +247,4 @@ export class ImportComponent implements OnInit {
       }
     });
   }
-
-  
 }

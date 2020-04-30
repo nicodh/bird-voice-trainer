@@ -37,7 +37,10 @@
         <mat-icon class="medium">skip_next</mat-icon>
     </li>
     <li>
-      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button>
+      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button> <button mat-stroked-button (click)="finishTraining()">Finish training</button>
+    </li>
+    <li>
+      Correct: <span class="green">{{matches}}</span> Wrong: <span class="red">{{wrongGuesses}}</span>
     </li>
   </ul>
 </div>
