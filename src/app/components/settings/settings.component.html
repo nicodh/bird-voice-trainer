@@ -1,7 +1,7 @@
 <button mat-stroked-button (click)="createTraining()" *ngIf="!showForm">
   New training
 </button>
-<div *ngIf="showForm">
+<div *ngIf="showForm" class="trainings">
   <form class="search-form">
     <mat-form-field class="search-field">
       <input matInput 
@@ -25,20 +25,22 @@
       [class.selected]="isSelected(species)"
       [class.visible]="!hideUnselected || (hideUnselected && isSelected(species))"
     >
-      <span>
+      <div>
         {{species.name}}
-      </span>
-      <mat-icon *ngIf="!isSelected(species)" class="medium align-right" >check_box_outline_blank</mat-icon>
-      <mat-icon *ngIf="isSelected(species)" class="medium align-right green" >check_box_outline</mat-icon>
+      </div>
+      <div class="icon-wrap">
+        <mat-icon *ngIf="!isSelected(species)" >check_box_outline_blank</mat-icon>
+        <mat-icon *ngIf="isSelected(species)" class="green" >check_box_outline</mat-icon>
+      </div>
     </li>
   </ul>
 </div>
 
 <ul *ngIf="!showForm" class="training-list">
   <li *ngFor="let training of trainings"class="pseudo-button">
-    <span (click)="editTraining(training)">
+    <div (click)="editTraining(training)">
       {{training.name}}
-    </span>
+    </div>
      <mat-icon class="red" (click)="confirmDelete(training)">highlight_off</mat-icon>
   </li>
 </ul>

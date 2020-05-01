@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { PersistenceService } from '../../services/persistenceService';
 import { Training, Species, Recording } from 'src/sharedTypes';
 import { AudioService } from '../../services/audioService';
@@ -11,7 +11,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog
   templateUrl: './trainer.component.html',
   styleUrls: ['./trainer.component.scss']
 })
-export class TrainerComponent implements OnInit {
+export class TrainerComponent implements OnInit, OnDestroy {
 
   trainings: Array<{ name: string; }>;
 
@@ -41,8 +41,8 @@ export class TrainerComponent implements OnInit {
 
   playedRecordings: number[] = [];
 
-  matches: 0;
-  wrongGuesses: 0;
+  matches = 0;
+  wrongGuesses = 0;
 
   ngOnInit(): void {
     document.onkeydown = (evt) => {
@@ -55,6 +55,12 @@ export class TrainerComponent implements OnInit {
     this.persistenceService.getTrainings().then(
       (trainings: Array<{ name: string; }>) => this.trainings = trainings
     );
+  }
+
+  ngOnDestroy() {
+    if (this.playing) {
+      this.stop();
+    }
   }
 
   loadTraining(training: Training) {

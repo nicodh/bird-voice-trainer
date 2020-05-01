@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import {FormControl} from '@angular/forms';
 import { ApiService, AutoSuggestItem } from '../../services/apiService';
 import { AudioService } from '../../services/audioService';
@@ -87,6 +87,10 @@ export class ImportComponent implements OnInit {
     this.persistenceService.loadSpecies().then(
       species => this.importedSpecies = species
     );
+  }
+
+  ngOnDestroy() {
+    this.audioService.stop();
   }
 
   editSpecies(species: Species) {

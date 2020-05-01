@@ -50,9 +50,9 @@
 <div *ngIf="viewMode == 'default' && showSpeciesList && !isLoading && importedSpecies.length > 0">
   <ul class="species-list" >
     <li *ngFor="let species of importedSpecies" class="pseudo-button">
-      <span (click)="editSpecies(species)">
+      <div (click)="editSpecies(species)">
         {{species.name}} 
-      </span>
+      </div>
       <mat-icon class="red" (click)="confirmDelete(species)">highlight_off</mat-icon>
       </li>
   </ul>

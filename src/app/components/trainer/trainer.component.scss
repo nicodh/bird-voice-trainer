@@ -1,3 +1,9 @@
+:host {
+  margin: auto;
+  overflow: hidden;
+}
+
+
 ul.trainings-list li {
   text-align: center;
 }
@@ -7,7 +13,7 @@ ul.trainings-list li {
 }
 
 ul.next-item {
-  max-width: 176px;
+  max-width: 11rem;
   margin: auto;
   li {
     span.content {
@@ -15,7 +21,23 @@ ul.next-item {
       float: left;
     }
     mat-icon {
-      float: left;
+      float: right;
     }
   }
+}
+
+span.green {
+  font-size: 4rem;
+  color: green;
+  padding-right: 3rem;
+  display: inline-block;
+  width: 2rem;
+}
+
+span.red {
+  font-size: 4rem;
+  color: red;
+  padding-left: 3rem;
+  display: inline-block;
+  width: 2rem;
 }

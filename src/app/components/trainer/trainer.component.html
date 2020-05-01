@@ -5,11 +5,19 @@
 </ul>
 <div *ngIf="currentTraining" class="training-display">
 <h3>{{currentTraining.name}}</h3>
+<span class="green">
+  <span *ngIf="matches">
+    {{matches}}
+  </span>
+</span>
 <mat-icon *ngIf="!playing" (click)="start()" class="big center">play_circle_outline</mat-icon>
 <mat-icon *ngIf="playing" (click)="pause()" class="big center">pause_circle_outline</mat-icon>
+<span class="red">
+  <span *ngIf="wrongGuesses">{{wrongGuesses}}</span>
+</span>
 
 <p></p>
-<mat-form-field class="search-field">
+<mat-form-field class="search-field" *ngIf="currentSpecies">
   <input matInput 
     placeholder="Enter result"
     [matAutocomplete]="auto"
@@ -28,19 +36,17 @@
       <span class="content" >
       Next sound 
     </span>
-      <mat-icon class="medium">skip_next</mat-icon>
+      <mat-icon class="medium">fast_forward</mat-icon>
     </li>
     <li class="pointer" (click)="nextSpecies()">
       <span class="content" >
         Next bird 
       </span>
         <mat-icon class="medium">skip_next</mat-icon>
+        
     </li>
     <li>
-      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button> <button mat-stroked-button (click)="finishTraining()">Finish training</button>
-    </li>
-    <li>
-      Correct: <span class="green">{{matches}}</span> Wrong: <span class="red">{{wrongGuesses}}</span>
+      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button> <button mat-stroked-button (click)="finishTraining()">End training</button>
     </li>
   </ul>
 </div>

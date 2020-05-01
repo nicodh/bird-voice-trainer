@@ -81,8 +81,12 @@ export class SettingsComponent implements OnInit {
       this.showDialog('Please enter a name');
       return;
     }
+    if (this.selectedSpecies.length < 1) {
+      this.showDialog('Please select at least one species');
+      return;
+    }
     if (!this.currentTraining) {
-      const existing = this.trainings.filter(training => training.name === name);
+      const existing = this.trainings.find(training => training.name === name);
       if (existing) {
         this.showDialog('There is already a training with name "' + name + '". Please choose another name');
         return;
