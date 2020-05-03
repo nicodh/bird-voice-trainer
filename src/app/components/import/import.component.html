@@ -27,7 +27,7 @@
     <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
   </div>
   <div *ngIf="!isLoading && viewMode!='default' && recordings?.length > 0">
-    <ul class="recordings" >
+    <ul class="list recordings" >
       <li *ngFor="let recording of recordings?.slice(startFrom, limitTo); index as i;"
         class="pseudo-button"
         [class.bold]="currentIndex === i"
@@ -38,9 +38,9 @@
           <mat-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" class="medium" >play_circle_outline</mat-icon>
           <mat-icon *ngIf="currentIndex === i" (click)="stop()" class="medium">pause_circle_outline</mat-icon>
         </div>
-        <span class="content pointer" (click)="toggleRecord($event, recording)" >
+        <div class="text pointer" (click)="toggleRecord($event, recording)" >
           Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
-        </span>
+        </div>
         <div class="icon-wrap right">
             <mat-icon *ngIf="!isSelected(recording)" class="medium align-right" (click)="toggleRecord($event, recording)" >check_box_outline_blank</mat-icon>
             <mat-icon *ngIf="isSelected(recording)" class="medium align-right green" (click)="toggleRecord($event, recording)" >check_box_outline</mat-icon>
@@ -51,7 +51,7 @@
   </div>
 </form>
 <div *ngIf="viewMode == 'default' && showSpeciesList && !isLoading && importedSpecies.length > 0">
-  <ul class="species-list" >
+  <ul class="list species-list" >
     <li *ngFor="let species of importedSpecies" class="pseudo-button">
       <div (click)="editSpecies(species)">
         {{species.name}}

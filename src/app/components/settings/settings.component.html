@@ -18,7 +18,7 @@
       Cancel
     </button>
   </form>
-  <ul class="species-list">
+  <ul class="list species-list">
     <li *ngFor="let species of allSpecies" 
       class="pseudo-button" 
       (click)="toggleSpecies($event, species)"
@@ -28,15 +28,13 @@
       <div>
         {{species.name}}
       </div>
-      <div class="icon-wrap">
-        <mat-icon *ngIf="!isSelected(species)" >check_box_outline_blank</mat-icon>
-        <mat-icon *ngIf="isSelected(species)" class="green" >check_box_outline</mat-icon>
-      </div>
+      <mat-icon *ngIf="!isSelected(species)" >check_box_outline_blank</mat-icon>
+      <mat-icon *ngIf="isSelected(species)" class="green" >check_box_outline</mat-icon>
     </li>
   </ul>
 </div>
 
-<ul *ngIf="!showForm" class="training-list">
+<ul *ngIf="!showForm" class="list training-list">
   <li *ngFor="let training of trainings"class="pseudo-button">
     <div (click)="editTraining(training)">
       {{training.name}}

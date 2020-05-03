@@ -80,7 +80,7 @@ div.content {
   margin:auto;
   padding-bottom: 5rem;
   max-width: 1200px;
-  font-size: 1.3rem;
+  // font-size: 1.3rem;
   text-align: center;
 }
 
@@ -187,25 +187,45 @@ button.mat-stroked-button {
   min-width: 8rem;
 }
 
-ul {
+ul.list {
   margin: 0;
   padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  margin-top: 2rem;
   li {
     list-style: none;
-    min-height: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
     &.pseudo-button {
       cursor: pointer;
       border: 1px solid #ddd;
       border-radius: 8px;
       text-align: center;
-      padding-top: 1.5rem;
-      min-width: 20rem;
+      padding-top: 1rem;
+      flex-basis: 23%;
+      margin-bottom: 1rem;
+      padding: 0;
+      div {
+        // width: calc(100% - 5rem);
+        // float: left;
+        flex-basis: 70%;
+        padding: 1rem 0;
+        &.icon-wrap {
+          flex-basis: 30%;
+        }
+      }
+      mat-icon {
+        padding-top: 0.9rem;
+      }
       &:hover {
         background-color: #efefef;
       }
-      span {
-        padding: 1rem 5rem;
-      }
+      // span {
+      //   padding: 1rem 5rem;
+      // }
       &.selected {
         background-color: #daf5da;
         &:hover {
@@ -214,37 +234,32 @@ ul {
       }
     }
   }
-  &.species-list,
-  &.training-list{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    li.pseudo-button {
-      flex-basis: 30%;
-      margin-bottom: 1rem;
-      padding: 0;
-      div {
-        width: calc(100% - 5rem);
-        float: left;
-        padding: 1.5rem 0;
-      }
-      mat-icon {
-        margin-top: 1.4rem;
-      }
-    }
-  }
+  // &.species-list,
   // &.training-list{
+  //   display: flex;
+  //   flex-wrap: wrap;
+  //   justify-content: space-around;
   //   li.pseudo-button {
-  //     padding-top: 1.3rem;
+  //     flex-basis: 23%;
+  //     margin-bottom: 1rem;
+  //     padding: 0;
+  //     div {
+  //       width: calc(100% - 5rem);
+  //       float: left;
+  //       padding: 1rem 0;
+  //     }
+  //     mat-icon {
+  //       margin-top: 1rem;
+  //     }
   //   }
   // }
   &.recordings {
-    margin: auto;
     li.pseudo-button {
       max-width: 48rem;
-      margin: 1rem auto;
+      margin-bottom:1rem;
       display: none;
       padding-top: 0;
+      flex-basis: 48%;
       &.visible {
         display: flex;
       }
@@ -256,14 +271,16 @@ ul {
         }
       }
       div {
-        flex-basis: 15%;
-        padding: 0.7rem 0 0.8rem 0;
-        white-space: nowrap;
+        flex-basis: 10%;
+        padding: 0 0 0.7rem 0;
+        &.text {
+          text-align: left;
+          flex-basis: 80%;
+          white-space: nowrap;
+          padding: 1.1rem 0 0 0;
+        }
       }
-      span {
-        text-align: left;
-        flex-basis: 70%;
-      }
+      
     }
   }
 }
@@ -274,23 +291,23 @@ ul {
   margin-top: 1.5rem;
 }
 
-.trainings ul.species-list {
-  margin-top: 2rem;
-  li.pseudo-button {
-    display: none;
-    &.visible {
-      display: flex;
-    }
-    div.icon-wrap {
-      float: left;
-      width: 5rem;
-      mat-icon {
-        font-size: 2rem;
-        margin: 0;
-      }
-    }
-  }
-}
+// .trainings ul.species-list {
+//   margin-top: 2rem;
+//   li.pseudo-button {
+//     display: none;
+//     &.visible {
+//       display: flex;
+//     }
+//     div.icon-wrap {
+//       float: left;
+//       width: 5rem;
+//       mat-icon {
+//         font-size: 2rem;
+//         margin: 0;
+//       }
+//     }
+//   }
+// }
 
 mat-icon {
   cursor: pointer;
@@ -316,53 +333,10 @@ mat-icon {
   margin: 0 1rem;
 }
 
-// ul.recordings {
-//   margin: auto;
-//   li {
-//     &.pseudo-button {
-//       width: 52rem;
-//       cursor: default;
-//       display: none;
-//       padding-top: 1rem;
-//       margin-bottom: 1rem;
-//       &.visible {
-//         display: flex;
-//       }
-//       div {
-//         flex-basis: 15%;
-//       }
-//       span {
-//         padding: 0.7rem 1rem 1rem 5rem;
-//         text-align: left;
-//         flex-basis: 70%;
-//       }
-//     }
-//     &.bold {
-//       font-weight: 500;
-//     }
-//   }
-// }
-
-
-
-
-// app-trainer ul.training-list li.pseudo-button {
-//   padding-top: 1.5rem;
-// }
-
 
 .pointer {
   cursor: pointer;
 }
-
-// .mat-checkbox-inner-container {
-//   width: 24px;
-//   height: 24px;
-// }
-
-// button.mat-stroked-button {
-//   font-size: 1.2rem;
-// }
 
 
   .loader{
@@ -382,19 +356,6 @@ mat-icon {
       fill: rgb(13, 69, 77);
     }
   }
-
-// .mat-form-field.mat-focused .mat-form-field-label{
-//   color: green;
-// }
-
-// /*** add/edit trainings **/
-// ul.trainings-list li {
-//   text-align: center;
-// }
-
-// .training-display {
-//   text-align: center;
-// }
 
 ul.next-item {
   max-width: 11rem;
@@ -422,38 +383,32 @@ span.red {
   width: 2rem;
 }
 
+@media screen and (max-width: 1160px) {
 
-// /* Responsive Styles */
-// @media screen and (max-width: 1360px) {
-//   ul.species-list,
-//   ul.training-list{
-//     min-width: 100%;
-//   }
-//   app-trainer {
-//     width: 90%;
-//   }
-// }
+  ul {
+    &.species-list,
+    &.training-list {
+      li.pseudo-button {
+        flex-basis: 30%;
+      }
+    }
+  }
+}
 
-// /* Responsive Styles */
 @media screen and (max-width: 767px) {
 
   #header {
     overflow-x: hidden;
   }
 
-//   .card-container > *:not(.circle-link) ,
-//   .terminal {
-//     width: 100%;
-//   }
-
-//   .card:not(.highlight-card) {
-//     height: 16px;
-//     margin: 8px 0;
-//   }
-
-//   .card.highlight-card span {
-//     margin-left: 72px;
-//   }
+  ul {
+    &.species-list,
+    &.training-list {
+      li.pseudo-button {
+        flex-basis: 47%;
+      }
+    }
+  }
 
 }
 
