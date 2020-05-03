@@ -96,6 +96,10 @@ div.content {
   display: block;
 }
 
+.footer {
+  margin-top: 5rem;
+}
+
 .card-container {
   display: flex;
   flex-wrap: wrap;
@@ -169,10 +173,10 @@ form.search-form {
     &.info {
       position: absolute;
       right: 0;
-      overflow: hidden;
       padding: 0 0.5rem 1rem 0;
       margin: 0;
-      top: 0.2rem;
+      top: -0.3rem;
+      overflow: hidden;
     }
   }
   .search-field {
@@ -360,7 +364,9 @@ mat-icon {
 ul.next-item {
   max-width: 11rem;
   margin: auto;
+  padding: 0;
   li {
+    list-style: none;
     mat-icon {
       vertical-align: bottom;
     }
@@ -418,29 +424,36 @@ span.red {
     display: none;
   }
 
-  ul.recordings {
+  ul.list.recordings {
     li.pseudo-button.visible {
-      margin: 1rem;
+      flex-basis: 95%;
+      margin-bottom: 1rem;
       font-size: 1rem;
-      span {
-        line-height: 2rem;
+      div {
+        flex-basis: 15%;
+        line-height: 1.6rem;
         padding: 0.7rem 0 0;
-      }
-      .icon-wrap.right {
-        position: absolute;
-        overflow: hidden;
-        right: 1rem;
+        &.text {
+          flex-basis: 70%;
+          white-space: normal;
+        }
+        &.icon-wrap {
+          overflow: hidden;
+          padding: 0.6rem 0 0.3rem 0;
+        }
+        mat-icon {
+          padding: 0;
+        }
       }
     }
   }
 
-  ul.species-list,
-  ul.training-list {
+  ul.list {
     li.pseudo-button {
       flex-basis: 90%;
       div {
-        width: calc(100% - 8rem);
-        padding-left: 4rem;
+        flex-basis: calc(70% - 5rem);
+        padding-left: 5rem;
       }
       .icon-wrap {
         overflow: hidden;
@@ -448,19 +461,16 @@ span.red {
     }
   }
 
-  .trainings ul.species-list li.pseudo-button {
-    display: flex;
-    div {
-      flex-basis: 80%;
-      width: auto;
-      padding: 1.4rem 0 1.4rem 4rem;
+  /** bugfix - without this the container is much more than 100% ?? **/
+  .trainings ul.species-list {
+    mat-icon {
+      overflow: hidden;
     }
-    div.icon-wrap {
-      width: auto;
-      flex-basis: 20%;
-      padding-left: 0;
-      padding-top: 1.1rem;
-    }
+  }
+
+  app-trainer ul.list li.pseudo-button div {
+    flex-basis: 90%;
+    padding-left: 0;
   }
 
   .card {
