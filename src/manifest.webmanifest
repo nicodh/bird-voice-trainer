@@ -1,6 +1,6 @@
 {
-  "name": "bird-voice-trainer",
-  "short_name": "bird-voice-trainer",
+  "name": "Vogelstimmen Trainer",
+  "short_name": "Vogelstimmen Trainer",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

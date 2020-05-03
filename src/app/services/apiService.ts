@@ -59,16 +59,19 @@ export class ApiService {
     );
   }
 
-  getRecordsForSpecies(species: string): Observable<Recording[]> {
+  getRecordsForSpecies(species: string){
     const options = {
       params: new HttpParams().set('query', species)
     };
     return this.http.get(environment.apiUrl + '/api/2/recordings', options).pipe(
       catchError(err => of([])),
-      map((res: RecordingsResponse) => res.recordings.filter(
-        (recording: Recording) => Number(recording.length.replace(':', '.')) >= this.minimalRecordingLength)
-      )
-    );
+      map((res: RecordingsResponse) => {
+        res.recordings = res.recordings.filter(
+          (recording: Recording) => Number(recording.length.replace(':', '.')) >= this.minimalRecordingLength
+        );
+        return res;
+      })
+    ).toPromise();
   }
 
   handleError() {
@@ -103,7 +106,11 @@ export class ApiService {
                   if (page.imageinfo) {
                     page.imageinfo.forEach(
                       imageinfo => {
-                        images.push(imageinfo);
+                        {
+                          if(imageinfo.url && imageinfo.url.indexOf('Wikispecies-logo') < 0){
+                            images.push(imageinfo);
+                          }
+                        }
                       }
                     );
                   }
@@ -115,5 +122,10 @@ export class ApiService {
         }
       }
     });
+  }
+
+  getWikipediaLink(term) {
+    return this.http.get(environment.wikipediaApiUrl + term);
+    // https://de.wikipedia.org/wiki/
   }
 }

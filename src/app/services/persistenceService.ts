@@ -114,7 +114,7 @@ export class PersistenceService {
 
   async updateTraining(training: Training) {
     this.db.trainings.update(training.id, training);
-    const relations = training.speciesId.map(
+    const relations = training.speciesIds.map(
       id => {
         return {training: training.id, species: id};
       }
@@ -136,13 +136,13 @@ export class PersistenceService {
     return this.db.recordings.where('species').equals(speciesId);
   }
 
-  saveTraining(training) {
+  saveTraining(training: Training) {
     const promises = [];
     this.db.trainings.add(
       {name: training.name}
     ).then(
       insertId => {
-        const relations = training.speciesId.map(
+        const relations = training.speciesIds.map(
           (id: number) => {
             return {training: insertId, species: id};
           }

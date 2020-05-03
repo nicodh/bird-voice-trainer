@@ -9,6 +9,7 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { TrainerComponent, ShowDialogComponent } from './components/trainer/trainer.component';
 import { ImportComponent } from './components/import/import.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
+import { SwUpdate } from '@angular/service-worker';
 import { ApiService } from './services/apiService';
 import { PersistenceService } from './services/persistenceService';
 import { environment } from '../environments/environment';
@@ -23,7 +24,7 @@ import {MatCheckboxModule} from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
 
 import { AngularSvgIconModule } from 'angular-svg-icon';
-import { 
+import {
   MessageDialogComponent,
   SpeciesInfoDialogComponent,
   ConfirmDialogComponent
@@ -66,4 +67,12 @@ import {
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(swUpdate: SwUpdate) {
+    swUpdate.available.subscribe(() => {
+      if (confirm('New version available. Load now?')) {
+        window.location.reload();
+      }
+    });
+  }
+}

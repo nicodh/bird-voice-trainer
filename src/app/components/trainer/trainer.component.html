@@ -1,6 +1,8 @@
 <ul class="training-list" *ngIf="!currentTraining">
   <li *ngFor="let training of trainings" class="pseudo-button" (click)="loadTraining(training)">
-     {{training.name}}
+    <div>
+      {{training.name}}
+    </div>
   </li>
 </ul>
 <div *ngIf="currentTraining" class="training-display">

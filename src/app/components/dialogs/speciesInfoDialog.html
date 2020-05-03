@@ -26,7 +26,10 @@
 <div style="text-align: center;">
   <div *ngIf="data.type === 'speciesInfo' && !data.loading">
     <h3>{{data.species.name}}</h3>
-    <p>{{data.species.taxonomicName}}</p>
+    <a *ngIf="data.species.wikipediaLink" title="show on wikipedia" href="{{data.species.wikipediaLink}}" target="_blank">
+      <p>{{data.species.taxonomicName}}</p>
+    </a>
+    <p *ngIf="!data.species.wikipediaLink">{{data.species.taxonomicName}}</p>
     <div *ngIf="data.species.image" >
       <img src="{{data.species.image}}" alt="{{data.species.name}}" width="90%"/>
     </div>

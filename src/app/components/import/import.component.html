@@ -1,6 +1,7 @@
 <form class="search-form">
   <mat-form-field class="search-field">
-    <input matInput 
+    <input matInput
+      id="searchfield"
       placeholder="Enter search term..."
       [matAutocomplete]="auto"
       [formControl]="searchFieldControl" 
@@ -11,22 +12,23 @@
         {{option.common_name}}
       </mat-option>
     </mat-autocomplete>
+    <mat-icon title="species info" class="medium pointer info" (click)="showInfoDialog($event)" *ngIf="currentSpecies">info_outline</mat-icon>
   </mat-form-field>
-
-  <mat-icon title="species info" class="medium pointer info" (click)="showInfoDialog()" *ngIf="currentSpecies">info_outline</mat-icon>
-  <br />
+  <div>
+    <button mat-stroked-button (click)="reset()" *ngIf="viewMode !== 'default'">Cancel</button>
+    <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save</button>
+  </div>
   <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedRecordings.length > 0">
     <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
   </button>
-  <button mat-stroked-button (click)="saveRecordings()" *ngIf="selectedRecordings.length > 0">Save</button>
-  <button mat-stroked-button (click)="reset()" *ngIf="viewMode !== 'default'">Cancel</button>
-  <div class="loader" *ngIf="(loadingRecords && !(recordings$ | async)) || isLoading">
+    
+  <div class="loader" *ngIf="(loadingRecords && (!recordings.length || isLoading))">
     <div *ngIf="loadingRecords">Loading recordings from www.xeno-canto.org</div>
     <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
   </div>
-  <div *ngIf="!isLoading && viewMode!='default'">
+  <div *ngIf="!isLoading && viewMode!='default' && recordings?.length > 0">
     <ul class="recordings" >
-      <li *ngFor="let recording of (recordings$ | async)?.slice(startFrom, limitTo); index as i;"
+      <li *ngFor="let recording of recordings?.slice(startFrom, limitTo); index as i;"
         class="pseudo-button"
         [class.bold]="currentIndex === i"
         [class.selected]="isSelected(recording)"
@@ -39,19 +41,20 @@
         <span class="content pointer" (click)="toggleRecord($event, recording)" >
           Type: {{recording.type | slice:0:20}}, {{recording.cnt}}, {{recording.length}}
         </span>
-        <div class="icon-wrap">
+        <div class="icon-wrap right">
             <mat-icon *ngIf="!isSelected(recording)" class="medium align-right" (click)="toggleRecord($event, recording)" >check_box_outline_blank</mat-icon>
             <mat-icon *ngIf="isSelected(recording)" class="medium align-right green" (click)="toggleRecord($event, recording)" >check_box_outline</mat-icon>
         </div>
       </li>
     </ul>
+    <div (click)="showMore()" class="pointer show-more">Showing {{this.limitTo - this.startFrom}} recordings: show more &gt;&gt;</div>
   </div>
 </form>
 <div *ngIf="viewMode == 'default' && showSpeciesList && !isLoading && importedSpecies.length > 0">
   <ul class="species-list" >
     <li *ngFor="let species of importedSpecies" class="pseudo-button">
       <div (click)="editSpecies(species)">
-        {{species.name}} 
+        {{species.name}}
       </div>
       <mat-icon class="red" (click)="confirmDelete(species)">highlight_off</mat-icon>
       </li>

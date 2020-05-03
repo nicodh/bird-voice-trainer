@@ -29,7 +29,7 @@ export class SettingsComponent implements OnInit {
 
   allSpecies: Species[];
 
-  selectedSpecies: number[] = [];
+  selectedSpeciesIds: number[] = [];
 
   hideUnselected = false;
 
@@ -60,13 +60,13 @@ export class SettingsComponent implements OnInit {
   }
 
   toggleSpecies(evt, species) {
-    if (this.selectedSpecies.indexOf(species.id) < 0) {
+    if (this.selectedSpeciesIds.indexOf(species.id) < 0) {
       console.log('add', species);
-      this.selectedSpecies.push(species.id);
+      this.selectedSpeciesIds.push(species.id);
       return false;
     } else {
       console.log('remove', species);
-      this.selectedSpecies = this.selectedSpecies.filter(r => r !== species.id);
+      this.selectedSpeciesIds = this.selectedSpeciesIds.filter(id => id !== species.id);
       return false;
     }
   }
@@ -81,7 +81,7 @@ export class SettingsComponent implements OnInit {
       this.showDialog('Please enter a name');
       return;
     }
-    if (this.selectedSpecies.length < 1) {
+    if (this.selectedSpeciesIds.length < 1) {
       this.showDialog('Please select at least one species');
       return;
     }
@@ -93,23 +93,23 @@ export class SettingsComponent implements OnInit {
       }
     }
     const onSuccess = () => {
-      this.cancel();
       this.refreshTrainings();
       this.showDialog('Training saved');
-    }
+      this.cancel();
+    };
     if (this.currentTraining) {
       this.persistenceService.updateTraining(
         {
           id: this.currentTraining.id,
           name: this.trainingNameFieldControl.value,
-          speciesId: this.selectedSpecies
+          speciesIds: this.selectedSpeciesIds
         }
       ).then(onSuccess);
     } else {
       this.persistenceService.saveTraining(
         {
           name: this.trainingNameFieldControl.value,
-          species: this.selectedSpecies
+          speciesIds: this.selectedSpeciesIds
         }
       ).then(onSuccess);
     }
@@ -118,7 +118,7 @@ export class SettingsComponent implements OnInit {
   async editTraining(training: Training) {
     this.persistenceService.loadSpeciesByTraining(training.id).then(
       assignedItems => {
-        this.selectedSpecies = assignedItems;
+        this.selectedSpeciesIds = assignedItems;
         this.showForm = true;
         this.trainingNameFieldControl.patchValue(training.name);
         console.log(assignedItems);
@@ -130,12 +130,12 @@ export class SettingsComponent implements OnInit {
   cancel() {
     this.showForm = false;
     this.trainingNameFieldControl.patchValue('');
-    this.selectedSpecies = [];
+    this.selectedSpeciesIds = [];
     this.currentTraining = null;
   }
 
   isSelected(species) {
-    return this.selectedSpecies.indexOf(species.id) > -1;
+    return this.selectedSpeciesIds.indexOf(species.id) > -1;
   }
 
   showDialog(message: string, cb: () => void = null) {

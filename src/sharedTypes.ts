@@ -2,7 +2,7 @@ export interface Training {
   id?: number;
   name: string;
   species?: Species[];
-  speciesId?: number[];
+  speciesIds?: number[];
 }
 
 export interface RecordingsResponse {
@@ -19,6 +19,7 @@ export interface Species {
   taxonomicName: string;
   image: string;
   recordings: number;
+  wikipediaLink?: string;
 }
 
 export interface Recording {

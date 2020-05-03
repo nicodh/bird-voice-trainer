@@ -9,14 +9,14 @@ import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
 import {MatDialog } from '@angular/material/dialog';
 import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent } from '../dialogs/';
 
-import { Recording, Species } from '../../../sharedTypes';
+import { Recording, Species, RecordingsResponse } from '../../../sharedTypes';
 
 @Component({
   selector: 'app-import',
   templateUrl: './import.component.html',
   styleUrls: ['./import.component.scss']
 })
-export class ImportComponent implements OnInit {
+export class ImportComponent implements OnInit, OnDestroy {
 
   isLoading = false;
 
@@ -32,7 +32,9 @@ export class ImportComponent implements OnInit {
 
   currentSpecies: Species;
 
-  recordings$: Observable<Recording[]>;
+  // recordings$: Observable<RecordingsResponse>;
+
+  recordings: Recording[] = [];
 
   currentIndex: number;
 
@@ -49,7 +51,7 @@ export class ImportComponent implements OnInit {
   viewMode = 'default';
 
   startFrom = 0;
-  limitTo = 100;
+  limitTo = 10;
 
   constructor(
     private apiService: ApiService,
@@ -65,18 +67,21 @@ export class ImportComponent implements OnInit {
 
   public reset() {
     this.selectedRecordings = [];
+    this.recordings = [];
     this.searchFieldControl.patchValue('');
-    this.recordings$ = from([]);
+    // this.recordings$ = from([]);
     this.selectedOption = null;
     this.currentSpecies = null;
+    this.currentIndex= -1;
     this.viewMode = 'default';
     this.loadingRecords = false;
     this.isLoading = false;
+    this.audioService.stop();
   }
 
   ngOnInit(): void {
     this.suggestions$ = this.searchFieldControl.valueChanges.pipe(
-      debounceTime(700),
+      debounceTime(500),
       tap(() => this.isLoading = true),
       switchMap(value => this.apiService.getAutoSuggests(value)
         .pipe(
@@ -99,9 +104,21 @@ export class ImportComponent implements OnInit {
     this.loadingRecords = true;
     this.searchFieldControl.patchValue(species.name);
     this.currentSpecies = species;
-    this.recordings$ = this.apiService.getRecordsForSpecies(species.taxonomicName);
+    this.apiService.getRecordsForSpecies(species.taxonomicName).then(
+      (res: RecordingsResponse) => this.recordings = res.recordings
+    );
     this.persistenceService.getRecordsBySpecies(species.id).toArray().then(
-      recordings => this.selectedRecordings = recordings
+      recordings => {
+        console.log('Recordings loaded!: ' + recordings.length);
+        this.selectedRecordings = recordings;
+      }
+    );
+    this.apiService.getWikipediaLink(this.currentSpecies.name).subscribe(
+      (res: any) => {
+        if (res.query.search.length && res.query.search[0].title) {
+          this.currentSpecies.wikipediaLink = 'https://de.wikipedia.org/wiki/' + res.query.search[0].title;
+        }
+      }
     );
   }
 
@@ -123,11 +140,21 @@ export class ImportComponent implements OnInit {
       };
     }
     this.searchFieldControl.patchValue(selectedOption.common_name);
-    this.recordings$ = this.apiService.getRecordsForSpecies(selectedOption.species);
+    this.apiService.getRecordsForSpecies(selectedOption.species).then(
+      (res: RecordingsResponse) => {
+        this.recordings = res.recordings;
+      }
+    );
+    // remove focus from input field to hide keyboard
+    document.getElementById('header').click();
   }
 
   toggleSelectView() {
     this.hideUnselected = !this.hideUnselected;
+  }
+
+  showMore() {
+    this.limitTo += 10;
   }
 
   async saveRecordings() {
@@ -203,7 +230,10 @@ export class ImportComponent implements OnInit {
     this.audioService.stop();
   }
 
-  showInfoDialog() {
+  showInfoDialog($event = null) {
+    if ($event) {
+      $event.stopPropagation();
+    }
     const species = this.currentSpecies ? this.currentSpecies : this.selectedOption;
     const dialogRef = this.dialog.open(SpeciesInfoDialogComponent, {
       width: '550px',

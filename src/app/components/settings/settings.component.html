@@ -8,7 +8,7 @@
         placeholder="Enter name"
         [formControl]="trainingNameFieldControl" />
     </mat-form-field><br />
-    <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedSpecies.length > 0">
+    <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedSpeciesIds.length > 0">
       <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
     </button>
     <button mat-stroked-button (click)="saveTraining()">

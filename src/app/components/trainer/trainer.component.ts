@@ -18,7 +18,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
   constructor(
     private persistenceService: PersistenceService,
     private audioService: AudioService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
     ) { }
 
   resultFieldControl: FormControl;
