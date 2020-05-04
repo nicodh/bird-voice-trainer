@@ -144,7 +144,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
     if (species.id === this.currentSpecies.id) {
       console.log('Success');
       this.matches++;
-      this.showDialog('Correct :-)', () => this.nextSpecies());
+      this.showCurrentBird('result', () => this.nextSpecies());
       this.audioService.stop();
     } else {
       this.wrongGuesses++;
@@ -183,12 +183,17 @@ export class TrainerComponent implements OnInit, OnDestroy {
 
   }
 
-  showCurrentBird() {
-    this.dialog.open(ShowDialogComponent, {
+  showCurrentBird(type: string, cb: () => void = null) {
+    const dialogRef = this.dialog.open(ShowDialogComponent, {
       width: '550px',
       data: {
-        type: 'result',
+        type,
         result: this.currentSpecies
+      }
+    });
+    dialogRef.afterClosed().subscribe(() => {
+      if (cb) {
+        cb();
       }
     });
   }

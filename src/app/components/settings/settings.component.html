@@ -1,3 +1,10 @@
+<h3 class="mobile-only">Add/edit Trainings</h3>
+<div *ngIf="allSpecies.length < 1">
+  No species imported!
+  <p>
+    Please <a routerLink="/import">import some species</a> first
+  </p>
+</div>
 <button mat-stroked-button (click)="createTraining()" *ngIf="!showForm">
   New training
 </button>
@@ -18,12 +25,11 @@
       Cancel
     </button>
   </form>
-  <ul class="list species-list">
+  <ul class="list species-list" [class.filter]="hideUnselected">
     <li *ngFor="let species of allSpecies" 
       class="pseudo-button" 
       (click)="toggleSpecies($event, species)"
       [class.selected]="isSelected(species)"
-      [class.visible]="!hideUnselected || (hideUnselected && isSelected(species))"
     >
       <div>
         {{species.name}}

@@ -43,4 +43,5 @@ export class SpeciesInfoDialogComponent {
       };
       this.apiService.getImagesForSpecies(taxonomicName, callback);
     }
+
 }

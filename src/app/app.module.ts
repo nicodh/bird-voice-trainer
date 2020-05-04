@@ -27,7 +27,8 @@ import { AngularSvgIconModule } from 'angular-svg-icon';
 import {
   MessageDialogComponent,
   SpeciesInfoDialogComponent,
-  ConfirmDialogComponent
+  ConfirmDialogComponent,
+  HelpDialogComponent
 } from './components/dialogs/';
 
 
@@ -40,7 +41,8 @@ import {
     ShowDialogComponent,
     MessageDialogComponent,
     SpeciesInfoDialogComponent,
-    ConfirmDialogComponent
+    ConfirmDialogComponent,
+    HelpDialogComponent
   ],
   imports: [
     BrowserModule,

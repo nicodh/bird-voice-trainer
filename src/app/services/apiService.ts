@@ -38,7 +38,7 @@ export class ApiService {
 
   minimalRecordingLength = 0.10;
 
-  imageSearchLimit = 50;
+  imageSearchLimit = 150;
   imageThumbWidth = 350;
   imageThumbHeight = 350;
 
@@ -78,7 +78,10 @@ export class ApiService {
 
   }
 
-  getImagesForSpecies(name: string, callback: (images: ImageInfo[]) => void) {
+  getImagesForSpecies(name: string, callback: (images: ImageInfo[]) => void, imageSearchLimit = 0) {
+    if (imageSearchLimit === 0) {
+      imageSearchLimit = this.imageSearchLimit;
+    }
     this.http.get(environment.pageApiUrl + name).subscribe(
       (data: WikimediaResponse) => {
       {
@@ -95,7 +98,7 @@ export class ApiService {
           });
         }
         if (matchingPageId) {
-          const dynamicUrlPart = '&gimlimit=' + this.imageSearchLimit
+          const dynamicUrlPart = '&gimlimit=' + imageSearchLimit
              + '&iiurlwidth=' + this.imageThumbWidth
              + '&iiurlheight=' + this.imageThumbHeight;
           this.http.get(environment.imageApiUrl + dynamicUrlPart + '&pageids=' + matchingPageId).subscribe(

@@ -1,11 +1,15 @@
 <div style="text-align: center;">
   <div *ngIf="data.type == 'result'">
+    <h1 class="green">Correct!</h1>
+    <h3 mat-dialog-title>{{data.result.name}}</h3>
+  </div>
+  <div *ngIf="data.type == 'hint'">
     <h1 mat-dialog-title>{{data.result.name}}</h1>
-    <div mat-dialog-content>
-      <p>{{data.result.taxonomicName}}</p>
-      <div *ngIf="data.result.image" >
-        <img src="{{data.result.image}}" alt="{{data.result.name}}" width="90%"/>
-      </div>
+  </div>
+  <div mat-dialog-content>
+    <p>{{data.result.taxonomicName}}</p>
+    <div *ngIf="data.result.image" >
+      <img src="{{data.result.image}}" alt="{{data.result.name}}" width="90%"/>
     </div>
   </div>
   <div mat-dialog-actions >

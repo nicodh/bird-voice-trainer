@@ -7,7 +7,7 @@ import { StreamState } from '../../services/streamState';
 import { Observable, from } from 'rxjs';
 import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
 import {MatDialog } from '@angular/material/dialog';
-import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent } from '../dialogs/';
+import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent, HelpDialogComponent } from '../dialogs/';
 
 import { Recording, Species, RecordingsResponse } from '../../../sharedTypes';
 
@@ -250,6 +250,15 @@ export class ImportComponent implements OnInit, OnDestroy {
     });
   }
 
+  showHelpDialog($event = null) {
+    if ($event) {
+      $event.stopPropagation();
+    }
+    this.dialog.open(HelpDialogComponent, {
+      width: '500px',
+    });
+  }
+
   confirmDelete(species: Species) {
     const dialogRef = this.dialog.open(ConfirmDialogComponent, {
       width: '350px',
@@ -267,9 +276,9 @@ export class ImportComponent implements OnInit, OnDestroy {
     });
   }
 
-  showDialog(message: string, cb: () => void = null) {
+  showDialog(message: string, cb: () => void = null, width = '250px') {
     const dialogRef = this.dialog.open(MessageDialogComponent, {
-      width: '250px',
+      width: width,
       data: {
         type: 'message',
         message

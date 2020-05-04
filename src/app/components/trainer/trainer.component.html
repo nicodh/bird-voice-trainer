@@ -1,3 +1,9 @@
+<h3 class="mobile-only">Trainer</h3>
+<div *ngIf="trainings.length < 1">
+  No training created!<p>
+    Please <a routerLink="/settings">create a training</a> first
+  </p>
+</div>
 <ul class="list training-list" *ngIf="!currentTraining">
   <li *ngFor="let training of trainings" class="pseudo-button" (click)="loadTraining(training)">
     <div>
@@ -33,22 +39,21 @@
     </div>
   </mat-autocomplete>
 </mat-form-field>
-  <ul class="next-item" *ngIf="currentSpecies">
-    <li class="pointer" (click)="nextRecording()">
-      <span class="content" >
+  <ul class="list next-item" *ngIf="currentSpecies">
+    <li class="pseudo-button" (click)="nextRecording()">
+      <div class="text" >
       Next sound 
-    </span>
+      </div>
       <mat-icon class="medium">fast_forward</mat-icon>
     </li>
-    <li class="pointer" (click)="nextSpecies()">
-      <span class="content" >
+    <li class="pseudo-button" (click)="nextSpecies()">
+      <div class="text" >
         Next bird 
-      </span>
-        <mat-icon class="medium">skip_next</mat-icon>
-        
+      </div>
+      <mat-icon class="medium">skip_next</mat-icon>
     </li>
     <li>
-      <button mat-stroked-button (click)="showCurrentBird()">Show bird</button> <button mat-stroked-button (click)="finishTraining()">End training</button>
+      <button mat-stroked-button (click)="showCurrentBird('hint')">Show bird</button> <button mat-stroked-button (click)="finishTraining()">End training</button>
     </li>
   </ul>
 </div>

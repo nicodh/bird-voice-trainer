@@ -1,3 +1,4 @@
+<h3 class="mobile-only">Import species</h3>
 <form class="search-form">
   <mat-form-field class="search-field">
     <input matInput
@@ -13,6 +14,7 @@
       </mat-option>
     </mat-autocomplete>
     <mat-icon title="species info" class="medium pointer info" (click)="showInfoDialog($event)" *ngIf="currentSpecies">info_outline</mat-icon>
+    <mat-icon title="help" class="medium pointer info" (click)="showHelpDialog($event)" *ngIf="!currentSpecies">help_outline</mat-icon>
   </mat-form-field>
   <div>
     <button mat-stroked-button (click)="reset()" *ngIf="viewMode !== 'default'">Cancel</button>
@@ -21,18 +23,19 @@
   <button mat-stroked-button (click)="toggleSelectView()" *ngIf="selectedRecordings.length > 0">
     <span *ngIf="!hideUnselected">Hide unselected</span> <span *ngIf="hideUnselected">Show unselected</span>
   </button>
+  <div *ngIf="importedSpecies.length > 0" class="intro">
     
+  </div>
   <div class="loader" *ngIf="(loadingRecords && (!recordings.length || isLoading))">
     <div *ngIf="loadingRecords">Loading recordings from www.xeno-canto.org</div>
     <svg-icon src="assets/icons/loading.svg" [svgStyle]="{ 'width.px':32 }"></svg-icon>
   </div>
   <div *ngIf="!isLoading && viewMode!='default' && recordings?.length > 0">
-    <ul class="list recordings" >
+    <ul class="list recordings" [class.filter]="hideUnselected" >
       <li *ngFor="let recording of recordings?.slice(startFrom, limitTo); index as i;"
         class="pseudo-button"
         [class.bold]="currentIndex === i"
         [class.selected]="isSelected(recording)"
-        [class.visible]="!hideUnselected || (hideUnselected && isSelected(recording))"
       >
         <div class="icon-wrap">
           <mat-icon *ngIf="currentIndex != i" (click)="playStream(recording.file, i)" class="medium" >play_circle_outline</mat-icon>

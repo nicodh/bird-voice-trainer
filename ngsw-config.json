@@ -1,6 +1,18 @@
 {
   "$schema": "./node_modules/@angular/service-worker/config/schema.json",
   "index": "/index.html",
+  "dataGroups": [{
+    "name": "api-performance",
+    "urls": [
+      "/api/**",
+      "https://de.wikipedia.org/w/api.php**"
+    ],
+    "cacheConfig": {
+      "strategy": "performance",
+      "maxSize": 100,
+      "maxAge": "3d"
+    }
+  }],
   "assetGroups": [
     {
       "name": "app",

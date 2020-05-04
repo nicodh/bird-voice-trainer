@@ -53,6 +53,10 @@ h6 {
   margin: 8px 0;
 }
 
+h3.mobile-only {
+  display: none;
+}
+
 p {
   margin: 0;
 }
@@ -71,6 +75,8 @@ app-root {
   height: 12rem;
   display: flex;
   justify-content: space-around;
+  max-width: 1200px;
+  margin: auto;
   img {
     height: 100%;
   }
@@ -145,6 +151,10 @@ div.content {
   position: relative;
 }
 
+a.card.active {
+  font-weight: bold;
+}
+
 a,
 a:visited,
 a:hover {
@@ -160,7 +170,12 @@ a:hover {
 .dialog {
   font-size: 1.4rem;
   line-height: 2.2rem;
+  &.help {
+    font-size: 1.2rem;
+    line-height: 1.7rem;
+  }
 }
+
 
 form.search-form {
   display: block;
@@ -175,20 +190,31 @@ form.search-form {
       right: 0;
       padding: 0 0.5rem 1rem 0;
       margin: 0;
-      top: -0.3rem;
+      top: 0;
       overflow: hidden;
     }
   }
-  .search-field {
-    min-width: 20rem;
+  mat-form-field {
+    font-size: 1.4rem;
+    &.mat-focused {
+      .mat-form-field-ripple {
+        background-color: #047728;
+      }
+      .mat-form-field-label {
+        color: #047728;
+      }
+    }
   }
-
+  .mat-form-field-infix {
+    width: 240px;
+  }
 }
 
 
 button.mat-stroked-button {
   margin: 1rem;
   min-width: 8rem;
+  background-color: #0a795333;
 }
 
 ul.list {
@@ -204,6 +230,7 @@ ul.list {
     flex-wrap: wrap;
     justify-content: space-around;
     &.pseudo-button {
+      background-color: #efefef;
       cursor: pointer;
       border: 1px solid #ddd;
       border-radius: 8px;
@@ -238,35 +265,14 @@ ul.list {
       }
     }
   }
-  // &.species-list,
-  // &.training-list{
-  //   display: flex;
-  //   flex-wrap: wrap;
-  //   justify-content: space-around;
-  //   li.pseudo-button {
-  //     flex-basis: 23%;
-  //     margin-bottom: 1rem;
-  //     padding: 0;
-  //     div {
-  //       width: calc(100% - 5rem);
-  //       float: left;
-  //       padding: 1rem 0;
-  //     }
-  //     mat-icon {
-  //       margin-top: 1rem;
-  //     }
-  //   }
-  // }
+
   &.recordings {
     li.pseudo-button {
       max-width: 48rem;
       margin-bottom:1rem;
-      display: none;
+      display: flex;
       padding-top: 0;
       flex-basis: 48%;
-      &.visible {
-        display: flex;
-      }
       &.bold {
         font-weight: bold;
         mat-icon {
@@ -287,6 +293,21 @@ ul.list {
       
     }
   }
+  &.recordings.filter {
+    li.pseudo-button {
+      display: none;
+      &.selected {
+        display: flex;
+      }
+    }
+  }
+}
+
+ul.list.filter .pseudo-button {
+  display: none;
+  &.selected {
+    display: flex;
+  }
 }
 
 .show-more {
@@ -294,24 +315,6 @@ ul.list {
   color: #aaa;
   margin-top: 1.5rem;
 }
-
-// .trainings ul.species-list {
-//   margin-top: 2rem;
-//   li.pseudo-button {
-//     display: none;
-//     &.visible {
-//       display: flex;
-//     }
-//     div.icon-wrap {
-//       float: left;
-//       width: 5rem;
-//       mat-icon {
-//         font-size: 2rem;
-//         margin: 0;
-//       }
-//     }
-//   }
-// }
 
 mat-icon {
   cursor: pointer;
@@ -362,14 +365,11 @@ mat-icon {
   }
 
 ul.next-item {
-  max-width: 11rem;
+  max-width: 40rem;
   margin: auto;
   padding: 0;
-  li {
-    list-style: none;
-    mat-icon {
-      vertical-align: bottom;
-    }
+  li.pseudo-button {
+    flex-basis: 48%;
   }
 }
 
@@ -387,6 +387,13 @@ span.red {
   padding-left: 3rem;
   display: inline-block;
   width: 2rem;
+}
+
+.intro {
+  font-size: 1.3rem;
+  line-height: 2rem;
+  max-width: 36rem;
+  margin: auto;
 }
 
 @media screen and (max-width: 1160px) {
@@ -420,22 +427,31 @@ span.red {
 
 @media screen and (max-width: 575px) {
 
+  h3.mobile-only {
+    display: block;
+    color: #026521;
+  }
+
+  .card.active {
+    display: none;
+  }
+
   #header img:last-child {
     display: none;
   }
 
   ul.list.recordings {
-    li.pseudo-button.visible {
+    li.pseudo-button {
       flex-basis: 95%;
       margin-bottom: 1rem;
       font-size: 1rem;
       div {
         flex-basis: 15%;
         line-height: 1.6rem;
-        padding: 0.7rem 0 0;
         &.text {
           flex-basis: 70%;
           white-space: normal;
+          padding: 0.7rem 0 0;
         }
         &.icon-wrap {
           overflow: hidden;
@@ -468,13 +484,13 @@ span.red {
     }
   }
 
-  app-trainer ul.list li.pseudo-button div {
+  app-trainer ul.list.training-list li.pseudo-button div {
     flex-basis: 90%;
     padding-left: 0;
   }
 
   .card {
-    width: 80%
+    flex-basis: 38%;
   }
 
   .mat-form-field {
@@ -483,9 +499,24 @@ span.red {
 
   .mat-dialog-actions {
     width: 100% !important;
+    margin-top: 1rem !important;
+    margin-bottom: -1rem !important;
     button.mat-stroked-button {
       min-width: 6rem;
     }
   }
 
+  a:focus {
+    outline: none;
+  }
+
+  .mat-typography app-species-info-dialog  {
+    h1,h2, h3 {
+      margin: 0;
+    }
+  }
+
+  .card.active {
+    display: none;
+  }
 }
