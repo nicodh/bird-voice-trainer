@@ -255,7 +255,7 @@ export class ImportComponent implements OnInit, OnDestroy {
       $event.stopPropagation();
     }
     this.dialog.open(HelpDialogComponent, {
-      width: '500px',
+      width: '550px',
     });
   }
 

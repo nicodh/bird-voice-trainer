@@ -27,7 +27,7 @@ export class SettingsComponent implements OnInit {
 
   currentTraining: Training;
 
-  allSpecies: Species[];
+  allSpecies: Species[] = [];
 
   selectedSpeciesIds: number[] = [];
 

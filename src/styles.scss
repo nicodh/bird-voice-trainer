@@ -506,6 +506,19 @@ span.red {
     }
   }
 
+  .dialog.help {
+    max-height: 80vh;
+    overflow: scroll;
+  }
+
+  .cdk-overlay-pane .mat-dialog-container {
+    padding: 1rem;
+  }
+
+  #cdk-overlay-0 {
+    width: 100% !important;
+  }
+
   a:focus {
     outline: none;
   }
