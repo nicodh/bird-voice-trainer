@@ -60,6 +60,7 @@ export class AudioService {
   }
 
   playStream(url) {
+    console.log(url);
     return this.streamObservable(url).pipe(takeUntil(this.stop$));
   }
 

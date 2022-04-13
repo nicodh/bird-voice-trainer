@@ -214,7 +214,7 @@ export class ImportComponent implements OnInit, OnDestroy {
   playStream(url: string, index: number) {
     this.currentIndex = index;
     this.audioService.stop();
-    this.audioService.playStream('https:' + url).subscribe(events => {});
+    this.audioService.playStream(url).subscribe(events => {});
   }
 
   pause() {
