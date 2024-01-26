@@ -1,5 +1,5 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Recording, Species, Training } from 'src/sharedTypes';
 import { AudioService } from '../../services/audioService';
@@ -21,7 +21,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
     public dialog: MatDialog,
     ) { }
 
-  resultFieldControl: FormControl;
+  resultFieldControl: UntypedFormControl;
 
   viewMode: 'default';
 
@@ -51,7 +51,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
         this.playing ? this.pause() : this.play();
       }
     };
-    this.resultFieldControl = new FormControl('');
+    this.resultFieldControl = new UntypedFormControl('');
     this.persistenceService.getTrainings().then(
       (trainings: Array<{ name: string; }>) => this.trainings = trainings
     );

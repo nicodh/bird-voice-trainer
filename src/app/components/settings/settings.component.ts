@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import { PersistenceService } from '../../services/persistenceService';
 import { Training } from '../../../sharedTypes';
 import { MessageDialogComponent, ConfirmDialogComponent } from '../dialogs';
@@ -21,7 +21,7 @@ export class SettingsComponent implements OnInit {
 
   showForm = false;
 
-  trainingNameFieldControl = new FormControl('');
+  trainingNameFieldControl = new UntypedFormControl('');
 
   trainings: Array<Training>;
 

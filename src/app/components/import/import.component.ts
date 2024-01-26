@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {UntypedFormControl} from '@angular/forms';
 import { ApiService, AutoSuggestItem } from '../../services/apiService';
 import { AudioService } from '../../services/audioService';
 import { PersistenceService } from '../../services/persistenceService';
@@ -24,7 +24,7 @@ export class ImportComponent implements OnInit, OnDestroy {
 
   showSpeciesList = true;
 
-  searchFieldControl = new FormControl('');
+  searchFieldControl = new UntypedFormControl('');
 
   suggestions$: Observable<AutoSuggestItem[]>;
 
