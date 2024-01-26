@@ -1,11 +1,13 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
-import { TrainerComponent } from './components/trainer/trainer.component';
-import { SettingsComponent } from './components/settings/settings.component';
+import { RouterModule, Routes } from '@angular/router';
 import { ImportComponent } from './components/import/import.component';
+import { IntroComponent } from './components/intro/intro.component';
+import { SettingsComponent } from './components/settings/settings.component';
+import { TrainerComponent } from './components/trainer/trainer.component';
 
 
 const routes: Routes = [
+  { path: '', component: IntroComponent },
   { path: 'trainer', component: TrainerComponent },
   { path: 'settings', component: SettingsComponent },
   { path: 'import', component: ImportComponent },

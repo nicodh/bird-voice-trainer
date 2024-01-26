@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-import { PersistenceService } from '../../services/persistenceService';
-import { Training, Species, Recording } from 'src/sharedTypes';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Recording, Species, Training } from 'src/sharedTypes';
 import { AudioService } from '../../services/audioService';
-import {FormControl} from '@angular/forms';
+import { PersistenceService } from '../../services/persistenceService';
 import { MessageDialogComponent } from '../dialogs/messageDialog.component';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 
 @Component({
   selector: 'app-trainer',
@@ -97,7 +97,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
   nextSpecies() {
     this.audioService.stop();
     this.playedRecordings = [];
-    if (this.playedSpecies.length === this.currentTraining.species.length - 1) {
+    if (this.playedSpecies.length === this.currentTraining?.species?.length - 1) {
       this.playedSpecies = [];
     } else if (this.currentSpecies) {
       this.playedSpecies.push(this.currentSpecies.id);
@@ -115,7 +115,7 @@ export class TrainerComponent implements OnInit, OnDestroy {
 
   nextRecording() {
     this.audioService.stop();
-    if (this.playedRecordings.length === this.currentRecordings.length) {
+    if (this.playedRecordings.length === this.currentRecordings?.length) {
       this.playedRecordings = [];
     }
     if (this.currentRecording) {
@@ -154,7 +154,8 @@ export class TrainerComponent implements OnInit, OnDestroy {
 
   playStream(url: string) {
     this.audioService.stop();
-    this.audioService.playStream('https:' + url).subscribe((evt: Event) => {
+    url = url.indexOf('http')===0 ? url : 'https:';
+    this.audioService.playStream(url).subscribe((evt: Event) => {
       console.log((evt.timeStamp / 1000).toFixed(0) + ' of ' + this.currentRecording.length);
       if (evt.type === 'ended') {
         console.log('ended');

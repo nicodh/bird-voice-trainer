@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
+import { Injectable } from '@angular/core';
 import { Observable, of } from 'rxjs';
-import { map, catchError } from 'rxjs/operators';
-import { Recording, RecordingsResponse, ImageInfo } from '../../sharedTypes';
+import { catchError, map } from 'rxjs/operators';
+import { environment } from 'src/environments/environment';
+import { ImageInfo, Recording, RecordingsResponse } from '../../sharedTypes';
 
 export interface AutoSuggestResponse {
   data: AutoSuggestItem[];

@@ -67,8 +67,8 @@
                 }
               ],
               "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
+              "outputHashing": "none",
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,

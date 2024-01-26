@@ -5,7 +5,7 @@
     "ng": "ng",
     "start": "ng serve",
     "serve": "run-p start start-proxy",
-    "start-proxy": "node local-proxy/index.js",
+    "start-proxy": "node proxy/index.js",
     "build": "ng build -c production bird-voice-trainer",
     "test": "ng test",
     "lint": "ng lint",

@@ -1,0 +1,21 @@
+{
+  "name": "bird-voice-trainer",
+  "version": "0.9.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "serve": "run-p start start-proxy",
+    "start-proxy": "node index.js",
+    "build": "ng build -c production bird-voice-trainer",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
+  },
+  "private": true,
+  "dependencies": {
+    "express": "^4.17.1",
+    "http-proxy": "^1.18.0",
+    "cors": "^2.8.5",
+    "body-parser": "^1.20.2"
+  }
+}
