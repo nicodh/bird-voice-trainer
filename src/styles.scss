@@ -195,12 +195,12 @@ form.search-form {
       right: 0;
       padding: 0 0.5rem 1rem 0;
       margin: 0;
-      top: 0;
       overflow: hidden;
     }
   }
   mat-form-field {
     font-size: 1.4rem;
+    width: 18rem;
     &.mat-focused {
       .mat-form-field-ripple {
         background-color: #047728;
@@ -330,7 +330,6 @@ mat-icon {
     }
   }
   &.medium {
-    font-size: 2rem;
   }
   &.small {
     font-size: 1rem;
@@ -514,6 +513,7 @@ span.red {
   .dialog.help {
     max-height: 80vh;
     overflow: scroll;
+    padding: 2rem;
   }
 
   .cdk-overlay-pane .mat-dialog-container {

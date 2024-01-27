@@ -1,15 +1,15 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import {UntypedFormControl} from '@angular/forms';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { UntypedFormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { Observable } from 'rxjs';
+import { debounceTime, finalize, switchMap, tap } from 'rxjs/operators';
 import { ApiService, AutoSuggestItem } from '../../services/apiService';
 import { AudioService } from '../../services/audioService';
 import { PersistenceService } from '../../services/persistenceService';
 import { StreamState } from '../../services/streamState';
-import { Observable, from } from 'rxjs';
-import { debounceTime, switchMap, tap, finalize } from 'rxjs/operators';
-import {MatDialog } from '@angular/material/dialog';
-import { SpeciesInfoDialogComponent, ConfirmDialogComponent, MessageDialogComponent, HelpDialogComponent } from '../dialogs/';
+import { ConfirmDialogComponent, HelpDialogComponent, MessageDialogComponent, SpeciesInfoDialogComponent } from '../dialogs/';
 
-import { Recording, Species, RecordingsResponse } from '../../../sharedTypes';
+import { Recording, RecordingsResponse, Species } from '../../../sharedTypes';
 
 @Component({
   selector: 'app-import',
@@ -146,7 +146,7 @@ export class ImportComponent implements OnInit, OnDestroy {
       }
     );
     // remove focus from input field to hide keyboard
-    document.getElementById('header').click();
+    document.getElementById('searchfield').blur();
   }
 
   toggleSelectView() {
