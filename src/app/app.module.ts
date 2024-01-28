@@ -72,7 +72,7 @@ import {
 })
 export class AppModule {
   constructor(swUpdate: SwUpdate) {
-    swUpdate.available.subscribe(() => {
+    swUpdate.versionUpdates.subscribe(() => {
       if (confirm('New version available. Load now?')) {
         window.location.reload();
       }

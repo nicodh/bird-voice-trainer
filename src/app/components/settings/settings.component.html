@@ -53,7 +53,7 @@
   <button mat-stroked-button (click)="exportDB()">Export Backup</button>
   <button mat-stroked-button (click)="showImport = true">Import Backup</button>
   <div *ngIf="showImport">
-     <input mat-stroked-button  type="file" (change)="selectFile($event)" /><br />
+     <input mat-stroked-button class="file-button" type="file" (change)="selectFile($event)" /><br />
     <button *ngIf="importedFile" mat-stroked-button (click)="importDB()">Upload DB</button>
     <button *ngIf="importedFile" mat-stroked-button (click)="unsetFile()">Cancel</button>
   </div> 

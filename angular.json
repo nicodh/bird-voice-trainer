@@ -20,7 +20,7 @@
             "outputPath": "dist/bird-voice-trainer",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "assets": [
               "src/favicon.ico",
@@ -91,28 +91,28 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "bird-voice-trainer:build"
+            "buildTarget": "bird-voice-trainer:build"
           },
           "configurations": {
             "development": {
-              "browserTarget": "bird-voice-trainer:build:development"
+              "buildTarget": "bird-voice-trainer:build:development"
             },
             "production": {
-              "browserTarget": "bird-voice-trainer:build:production"
+              "buildTarget": "bird-voice-trainer:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "bird-voice-trainer:build"
+            "buildTarget": "bird-voice-trainer:build"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
+            "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.spec.json",
             "karmaConfig": "karma.conf.js",
             "assets": [
