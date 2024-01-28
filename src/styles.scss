@@ -332,9 +332,8 @@ mat-icon {
   cursor: pointer;
   &.big {
     font-size: 5rem;
-    &.center {
-      margin: 0 3rem 3rem 0;
-    }
+    height: auto;
+    width: auto;
   }
   &.medium {
   }
