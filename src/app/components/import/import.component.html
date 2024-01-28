@@ -13,7 +13,7 @@
         {{option.common_name}}
       </mat-option>
     </mat-autocomplete>
-    <mat-icon title="species info" class="medium pointer info" (click)="showInfoDialog($event)" *ngIf="currentSpecies">image</mat-icon>
+    <mat-icon title="Image for this bird" class="medium pointer info" (click)="showInfoDialog($event)" *ngIf="currentSpecies">image</mat-icon>
     <mat-icon title="help" class="medium pointer info" (click)="showHelpDialog($event)" *ngIf="!currentSpecies">help_outline</mat-icon>
   </mat-form-field>
   <div>
