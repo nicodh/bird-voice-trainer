@@ -53,6 +53,8 @@ export class ImportComponent implements OnInit, OnDestroy {
   startFrom = 0;
   limitTo = 10;
 
+  copyright = -1;
+
   constructor(
     private apiService: ApiService,
     private audioService: AudioService,
@@ -105,7 +107,11 @@ export class ImportComponent implements OnInit, OnDestroy {
     this.searchFieldControl.patchValue(species.name);
     this.currentSpecies = species;
     this.apiService.getRecordsForSpecies(species.taxonomicName).then(
-      (res: RecordingsResponse) => this.recordings = res.recordings
+      (res: RecordingsResponse) => {
+        if(res.recordings) {
+          this.recordings = res.recordings;
+        }
+      }
     );
     this.persistenceService.getRecordsBySpecies(species.id).toArray().then(
       recordings => {
@@ -151,6 +157,15 @@ export class ImportComponent implements OnInit, OnDestroy {
 
   toggleSelectView() {
     this.hideUnselected = !this.hideUnselected;
+  }
+
+  showCopyright(evt: MouseEvent, record: Recording, index: number) {
+    if (this.copyright === index) {
+      this.copyright = -1;
+    } else {
+      this.copyright = index;
+    }
+    evt.stopPropagation();
   }
 
   showMore() {
@@ -200,7 +215,7 @@ export class ImportComponent implements OnInit, OnDestroy {
     return this.selectedRecordings.find(selectedRecording => selectedRecording.id === recording.id );
   }
 
-  toggleRecord(evt, recording: Recording) {
+  toggleRecord(evt: MouseEvent, recording: Recording) {
     if (this.isSelected(recording)) {
       console.log('remove', recording);
       this.selectedRecordings = this.selectedRecordings.filter(r => r.id !== recording.id);

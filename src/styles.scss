@@ -84,7 +84,7 @@ app-root {
 
 div.content {
   margin:auto;
-  padding-bottom: 5rem;
+  padding-bottom: 7rem;
   max-width: 1200px;
   // font-size: 1.3rem;
   text-align: center;
@@ -99,12 +99,22 @@ div.intro ol {
   position: absolute;
   bottom: 0;
   text-align: center;
-  height: 2rem;
+  height: 6rem;
   width: 100%;
+  line-height: 2.5rem;
   a {
     color: #999;
   }
   display: block;
+  .xeno-canto {
+    font-size: 1.1rem;
+    a {
+      background-color: hsl(14, 87%, 28%);
+      color: #fff;
+      font-weight: bold;
+      padding: 3px;
+    }
+  }
 }
 
 .footer {
@@ -295,11 +305,19 @@ ul.list {
       div {
         flex-basis: 10%;
         padding: 0 0 0.7rem 0;
+        position: relative;
         &.text {
           text-align: left;
           flex-basis: 80%;
           white-space: nowrap;
           padding: 1.1rem 0 0 0;
+          a {
+            padding-left: 1rem;
+          }
+          svg {
+            position: absolute;
+            right: 3rem;
+          }
         }
       }
       

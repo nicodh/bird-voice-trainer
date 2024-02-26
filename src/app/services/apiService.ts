@@ -49,7 +49,8 @@ export class ApiService {
     if (searchTerm.length < 1) {
       return of([]);
     }
-    return this.http.get(environment.apiUrl + '/api/internal/completion/species', options).pipe(
+    const url = environment.apiUrl + '/api/internal/completion/species';
+    return this.http.get(url, options).pipe(
       catchError(err => of([])),
       map((res: AutoSuggestResponse) => {
         return res.data.map((data, index) => {
@@ -59,17 +60,24 @@ export class ApiService {
     );
   }
 
-  getRecordsForSpecies(species: string){
+  getRecordsForSpecies(species: string): Promise<RecordingsResponse | null>{
     const options = {
       params: new HttpParams().set('query', species)
     };
-    return this.http.get(environment.apiUrl + '/api/2/recordings', options).pipe(
+    const url = environment.apiUrl + '/api/2/recordings';
+    return this.http.get(url, options).pipe(
       catchError(err => of([])),
       map((res: RecordingsResponse) => {
-        res.recordings = res.recordings.filter(
-          (recording: Recording) => Number(recording.length.replace(':', '.')) >= this.minimalRecordingLength
-        );
-        return res;
+        if(Array.isArray(res.recordings)) {
+          res.recordings = res.recordings.filter(
+            (recording: Recording) => Number(recording.length.replace(':', '.')) >= this.minimalRecordingLength
+          );
+          return res;
+        } else {
+          console.log('No records found!');
+          return null;
+        }
+        
       })
     ).toPromise();
   }

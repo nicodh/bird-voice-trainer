@@ -9,7 +9,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ServiceWorkerModule, SwUpdate } from '@angular/service-worker';
+import { ServiceWorkerModule, SwUpdate, VersionEvent } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -72,9 +72,11 @@ import {
 })
 export class AppModule {
   constructor(swUpdate: SwUpdate) {
-    swUpdate.versionUpdates.subscribe(() => {
-      if (confirm('New version available. Load now?')) {
-        window.location.reload();
+    swUpdate.versionUpdates.subscribe((evt: VersionEvent) => {
+      if (evt.type === 'VERSION_READY') {
+        if (confirm('New version available. Load now?')) {
+          window.location.reload();
+        }
       }
     });
   }

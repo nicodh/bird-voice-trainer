@@ -46,7 +46,6 @@ export class TrainerComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     document.onkeydown = (evt) => {
-      console.log(evt);
       if (this.currentTraining && evt.code === 'Space') {
         this.playing ? this.pause() : this.play();
       }
@@ -140,7 +139,6 @@ export class TrainerComponent implements OnInit, OnDestroy {
   }
 
   onOptionSelected(species: Species) {
-    console.log(species);
     if (species.id === this.currentSpecies.id) {
       console.log('Success');
       this.matches++;
@@ -158,7 +156,6 @@ export class TrainerComponent implements OnInit, OnDestroy {
     this.audioService.playStream(url).subscribe((evt: Event) => {
       console.log((evt.timeStamp / 1000).toFixed(0) + ' of ' + this.currentRecording.length);
       if (evt.type === 'ended') {
-        console.log('ended');
         this.nextRecording();
       }
     });
